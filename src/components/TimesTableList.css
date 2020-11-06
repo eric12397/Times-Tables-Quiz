@@ -1,0 +1,36 @@
+.times-table-grid {
+  display: flex;                       
+  flex-wrap: wrap;                    
+  justify-content: space-around;
+  
+}
+.item {
+  color: #4da9f2;
+  font-size: 2rem;
+  flex: 0 0 22%;                     
+  height: 100px;
+  margin-bottom: 15px;
+  background-color: #3f4652;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  /* aligns text in center of div */
+  text-align: center;
+  vertical-align: middle;
+  line-height: 100px;
+}
+
+.item-selected {
+  background-color: #8dc885;
+  box-shadow: 0 0 10px #31b43a; /* horiz. offset, vert. offset, blur, color */
+  color: white;
+}
+
+.settings-wrapper {
+  display: inline-flex;
+}
+
+.settings {
+  margin: 6px;
+  color: #4da9f2;
+}

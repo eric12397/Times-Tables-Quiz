@@ -69,10 +69,10 @@ const evaluateAnswer = userInput => {
 }
 
 const generateIncorrectAnswers = answer => {
-  const min = answer - 4 > 0 ? answer - 4 : 0 // ensures that min is not a negative integer
-  const max = answer + 4
+  const min = answer - 10 > 0 ? answer - 10 : 0 // ensures that min is not a negative integer
+  const max = answer + 10
   const incorrectAnswersArray = Array.from({length: max - min + 1},(v,k)=>k + min)
-  return incorrectAnswersArray.filter(e => e !== answer)
+  return incorrectAnswersArray.filter(e => e !== answer) // returns array without correct answer
 }
 
 const getNewProblem = () => {
@@ -89,12 +89,11 @@ const getNewProblem = () => {
     let incorrectAnswers = generateIncorrectAnswers(correctAnswer)
     choices.forEach(choice => {
       if (choice.innerText != correctAnswer) {
-        console.log('incorrectAnswers before', incorrectAnswers)
         const index = Math.floor(Math.random() * incorrectAnswers.length)
         const incorrectAnswer = incorrectAnswers[index] // chooses random answer from array
+        console.log(incorrectAnswer)
         choice.innerText = incorrectAnswer
         incorrectAnswers.splice(index, 1) // remove from array to avoid duplicate choices
-        console.log('incorrectAnswers after', incorrectAnswers)
       }
     })
   }

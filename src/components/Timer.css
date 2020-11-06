@@ -1,0 +1,27 @@
+.timer {
+  height: 10px;
+  width: 82%;
+  margin: 0 auto;
+  position: relative;
+  top: 25px;
+
+}
+
+.timer-bar {
+  display: block;
+  border-radius: 10px;
+  height: 100%;
+  transition: width 1s linear;
+}
+
+.green-bar {
+  background-color: #1be354;
+}
+
+.yellow-bar {
+  background-color: yellow;
+}
+
+.red-bar {
+  background-color: red;
+}

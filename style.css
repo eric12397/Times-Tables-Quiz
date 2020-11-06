@@ -1,99 +1,97 @@
 body {
-	background: linear-gradient(90deg, rgba(54,217,182,1) 0%, rgba(49,159,204,1) 88%);*/
+  background: #f9fcff
 }
 
 header {
-	text-align: center
+  text-align: center
 }
 
 .result {
-	text-align: center;
-	font-size: 20px;
-	color: white;
+  text-align: center;
+  font-size: 20px;
+  color: white;
 }
 
 .correct-stat {
-	font-size: 20px;
-	color: white;
-	position: absolute;
-	top: 10px;
+  font-size: 20px;
+  color: white;
+  position: absolute;
+  top: 10px;
 }
 
 .incorrect-stat {
-	font-size: 20px;
-	color: white;
-	position: absolute;
-	top: 35px;
+  font-size: 20px;
+  color: white;
+  position: absolute;
+  top: 35px;
 }
 
 .high-score {
-	position: absolute;
-	color: white;
-	font-size: 25px;
-	top: 10px;
-	left: 93%;
+  position: absolute;
+  color: white;
+  font-size: 25px;
+  top: 10px;
+  left: 93%;
 }
 
 .container {
-	position: relative;
-	background: #202833;
-	border-radius: 15px;
-	padding: 20px;
-	margin: 0 auto;
-	width: 80%;
+  position: relative;
+  background: #202833;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 0 auto;
+  width: 80%;
 }
 
 .problem-container {
-	background-color: #3f4652;
-	border: 1px solid black;
-	border-radius: 15px;
-	width: 60%;
-	margin: 0 auto;
-	text-align: center;
-	padding: 15px;
-	font-size: 2rem;
-	color: white;	
+  background-color: #3f4652;
+  border: 1px solid black;
+  border-radius: 15px;
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 15px;
+  font-size: 2rem;
+  color: white; 
 }
 
 .timer {
-	height: 10px;
-	width: 82%;
-	margin: 0 auto;
-	margin-top: 20px;
+  height: 10px;
+  width: 82%;
+  margin: 0 auto;
+  margin-top: 20px;
 }
 
 .timer-bar {
-	background-color: red;
-	display: block;
-  	border-radius: 10px;
-  	height: 100%;
-  	transition: width 1s linear;
+  background-color: red;
+  display: block;
+    border-radius: 10px;
+    height: 100%;
+    transition: width 1s linear;
 }
 
 .choice-container {
-	display: grid;
-	margin: 0 auto;
-	margin-top: 15px;
+  display: grid;
+  margin: 0 auto;
+  margin-top: 15px;
 }
 
 .choice {
-	font-size: 2rem;
-	color: white;
-	background: #3f4652;
-	border: 2px ;
-	border-radius: 15px;
-	padding: 10px 30px;
-	margin: 10px;
-	cursor: pointer;
-	transition: 0.2s all
+  font-size: 2rem;
+  color: white;
+  background: #3f4652;
+  border: 2px ;
+  border-radius: 15px;
+  padding: 10px 30px;
+  margin: 10px;
+  cursor: pointer;
+  transition: 0.2s all
 }
 
 .choice:hover {
-	transform: scale(1.03)
+  transform: scale(1.03)
 }
 
 .choice:active {
-	transform: scale(1.00)
+  transform: scale(1.00)
 }
-
-

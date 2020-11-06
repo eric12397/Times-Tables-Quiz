@@ -1,0 +1,14 @@
+.menu-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-content {
+  background: #202833;
+  border-radius: 15px;
+  padding: 30px;
+  width: 80%;
+  margin: 0 auto;
+ 
+}
