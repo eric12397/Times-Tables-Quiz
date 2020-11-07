@@ -1,7 +1,8 @@
 import './TimesTableList.css';
-import React, { useState } from 'react';
+import React from 'react';
 import Button from './Button';
 import DifficultySettings from './DifficultySettings';
+import QuestionLimit from './QuestionLimit';
 
 const TimesTableList = props => {
   const handleClick = event => {
@@ -34,6 +35,10 @@ const TimesTableList = props => {
         <div className='settings'>
           <DifficultySettings setDifficulty={ props.setDifficulty } />
         </div> 
+
+        <div className='settings'>
+          <QuestionLimit setQuestionLimit={ props.setQuestionLimit }/>
+        </div>
       </div>
     </React.Fragment>
   )

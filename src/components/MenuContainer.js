@@ -1,12 +1,13 @@
 import './MenuContainer.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TimesTableList from './TimesTableList';
 import Quiz from './Quiz';
 
 
 const MenuContainer = () => {
-  const [start, setStart] = useState(false)
+  const [isQuizActive, setIsQuizActive] = useState(false);
   const [difficulty, setDifficulty] = useState(null);
+  const [questionLimit, setQuestionLimit] = useState(0);
   const [timesTables, setTimesTables] = useState([
     { value: 1, isSelected: false },
     { value: 2, isSelected: false },
@@ -50,35 +51,43 @@ const MenuContainer = () => {
 
   const startQuiz = () => {
     const atLeastOneTimesTableSelected = timesTables.some(item => item.isSelected === true);
-    if (atLeastOneTimesTableSelected && difficulty) {
-      setStart(true);
+    if (atLeastOneTimesTableSelected && difficulty && questionLimit !== 0) {
+      setIsQuizActive(true);
     } else {
       console.log('You must select at least one times table and difficuty.')
     }
   }
 
   const backToMenu = () => {
-    setStart(false);
+    setIsQuizActive(false);
     setDifficulty(null);
+    setQuestionLimit(0);
+    setTimesTables(
+      timesTables.map(item => ({ ...item, isSelected: false }))
+    )
   }
 
   return (
     <div className="menu-container">
       <div className="menu-content">
-        { start ? 
+        { isQuizActive ? 
           <Quiz 
             selectedTimesTables={ selectedTimesTables } 
+            questionLimit={ questionLimit }
             difficulty={ difficulty } 
             backToMenu={ backToMenu }
+            isQuizActive={ isQuizActive }
+            setIsQuizActive={ setIsQuizActive }
           /> : 
           <TimesTableList 
             timesTables={ timesTables } 
             selectItem={ selectItem }
             selectAll={ selectAll } 
             setDifficulty={ setDifficulty }
+            setQuestionLimit={ setQuestionLimit }
             startQuiz={ startQuiz }
           /> 
-          }
+        }
       </div>
     </div>
   )

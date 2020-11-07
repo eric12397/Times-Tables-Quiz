@@ -1,7 +1,7 @@
-import './Question.css';
+import './QuestionContainer.css';
 import React from 'react'
 
-const Question = props => {
+const QuestionContainer = props => {
   const correctAnswer = props.firstFactor * props.secondFactor;
 
   return (
@@ -13,4 +13,4 @@ const Question = props => {
   )
 }
 
-export default Question
+export default QuestionContainer

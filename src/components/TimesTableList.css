@@ -28,6 +28,7 @@
 
 .settings-wrapper {
   display: inline-flex;
+  flex-wrap: wrap; 
 }
 
 .settings {
