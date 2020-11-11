@@ -32,6 +32,7 @@
 }
 
 .settings {
-  margin: 6px;
+  margin: 5px;
   color: #4da9f2;
+  flex-wrap: wrap;
 }

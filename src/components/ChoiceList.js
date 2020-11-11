@@ -11,7 +11,7 @@ const ChoiceList = props => {
             correctAnswer={ props.correctAnswer }
             evaluateInput={ props.evaluateInput }
             isCorrect={ props.isCorrect }
-            isAnswered={ props.isAnswered }
+            isPending={ props.isPending }
           />
       ))}
     </div>

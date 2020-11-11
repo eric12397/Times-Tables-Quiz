@@ -1,0 +1,29 @@
+.results-table {
+  font-size: 1.5rem;
+  color: #4da9f2;
+  width: 100%;
+  overflow-x: auto;
+}
+
+td, th {
+  text-align: center;
+  padding: 15px;
+}
+
+
+tr:nth-child(even) {
+  background-color: #3f4652;
+}
+
+.score {
+  color: #4da9f2;
+  text-align: center
+}
+
+.correct {
+  color: #8dc885;
+}
+
+.incorrect {
+  color: red;
+}

@@ -4,12 +4,14 @@ import React from 'react'
 const Timer = props => {
 
   const getTimerStyle = () => {
-    if (props.timer > 50) {
+    if (props.isPending && !props.isCorrect) {
+      return 'red-bar';
+    } else if (props.timer > 50) {
       return 'green-bar';
     } else if (props.timer > 25) {
       return 'yellow-bar';
     } else {
-      return 'red-bar'
+      return 'red-bar';
     }
   }
  

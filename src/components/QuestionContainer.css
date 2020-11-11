@@ -1,6 +1,5 @@
 .question-container {
   background-color: #3f4652;
-  border: 1px solid black;
   border-radius: 15px;
   width: 60%;
   margin: 0 auto;
@@ -8,4 +7,12 @@
   padding: 15px;
   font-size: 2rem;
   color: #4da9f2; 
+}
+
+.success-border {
+	box-shadow: 0 0 10px #31b43a;
+}
+
+.failure-border {
+	box-shadow: 0 0 10px red;
 }

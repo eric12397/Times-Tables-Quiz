@@ -7,8 +7,9 @@ const DifficultySettings = props => {
   
   return (
     <React.Fragment>
-      <p> Select your difficulty </p>
+      
       <div>
+      <p> Select your difficulty </p>
         <input 
           type="radio" 
           id="beginner" 
@@ -16,7 +17,7 @@ const DifficultySettings = props => {
           value="beginner" 
           onChange={ handleChange }
         />
-        <label for="beginner">Beginner</label>
+        <label htmlFor="beginner">Beginner</label>
       </div>
 
       <div>
@@ -27,7 +28,7 @@ const DifficultySettings = props => {
           value="intermediate" 
           onChange={ handleChange }
         />
-        <label for="intermediate">Intermediate</label>
+        <label htmlFor="intermediate">Intermediate</label>
       </div>
 
       <div>
@@ -38,7 +39,7 @@ const DifficultySettings = props => {
           value="advanced" 
           onChange={ handleChange }
         />
-        <label for="advanced">Advanced</label>
+        <label htmlFor="advanced">Advanced</label>
       </div>
     </React.Fragment>
   )

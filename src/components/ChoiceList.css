@@ -32,10 +32,12 @@
   background-color: #8dc885;
   box-shadow: 0 0 10px #31b43a; /* horiz. offset, vert. offset, blur, color */
   color: white;
+  pointer-events: none;
 }
 
 .failure-glow {
   background-color: red;
   box-shadow: 0 0 10px red; /* horiz. offset, vert. offset, blur, color */
   color: white;
+  pointer-events: none;
 }

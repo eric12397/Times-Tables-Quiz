@@ -25,7 +25,7 @@ const TimesTableList = props => {
 
       <div className="settings-wrapper">
         <div className='settings'>
-          <Button onClick={ props.startQuiz }>Start</Button>
+          <Button onClick={ props.startQuiz }>Practice</Button>
         </div>
 
         <div className='settings'>
