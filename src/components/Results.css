@@ -1,5 +1,4 @@
 .results-table {
-  font-size: 1.5rem;
   color: #4da9f2;
   width: 100%;
   overflow-x: auto;
@@ -10,9 +9,13 @@ td, th {
   padding: 15px;
 }
 
+td {
+  font-size: 1rem;
+}
+
 
 tr:nth-child(even) {
-  background-color: #3f4652;
+  background-color: #373c47;
 }
 
 .score {

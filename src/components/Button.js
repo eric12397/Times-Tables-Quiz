@@ -7,10 +7,12 @@ const Button = props => {
   }
 
   return (
-    <button className="btn" onClick={ handleClick }>
+    <button className={ `btn ${props.color}` } onClick={ handleClick }>
       { props.children }
     </button>
   )
 }
+
+
 
 export default Button

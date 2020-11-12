@@ -1,0 +1,12 @@
+.intro-container {
+	margin: 20px;
+	color: white;
+	text-align: center;
+	font-size: 2rem;
+}
+
+.intro-message {
+	padding: 50px;
+	margin-bottom: 20px;
+	background-color: #373c47;
+}

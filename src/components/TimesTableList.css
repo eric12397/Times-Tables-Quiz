@@ -10,7 +10,7 @@
   flex: 0 0 22%;                     
   height: 100px;
   margin-bottom: 15px;
-  background-color: #3f4652;
+  background-color: #373c47;
   cursor: pointer;
   transition: all 0.3s ease;
 
@@ -24,15 +24,4 @@
   background-color: #8dc885;
   box-shadow: 0 0 10px #31b43a; /* horiz. offset, vert. offset, blur, color */
   color: white;
-}
-
-.settings-wrapper {
-  display: inline-flex;
-  flex-wrap: wrap; 
-}
-
-.settings {
-  margin: 5px;
-  color: #4da9f2;
-  flex-wrap: wrap;
 }

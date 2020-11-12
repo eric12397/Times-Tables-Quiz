@@ -4,7 +4,7 @@ import { RiArrowGoBackLine } from 'react-icons/ri';
 import { BiCheckCircle } from 'react-icons/bi';
 import { VscError } from 'react-icons/vsc';
 
-const Results = props => {
+const QuizResults = props => {
 
   return (
     <React.Fragment>
@@ -36,4 +36,4 @@ const Results = props => {
    )
 }
 
-export default Results
+export default QuizResults

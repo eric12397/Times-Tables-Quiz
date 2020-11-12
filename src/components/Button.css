@@ -1,10 +1,25 @@
 .btn {
-  background-color: #8dc885;
-  padding: 10px;
-  border: 2px solid #8dc885;
+  padding: 15px;
+  font-size: 1.25rem;
+  color: #fafafa;
   border-radius: 5px;
-  width: 120px;
   text-align: center;
   cursor: pointer;
+  transition: all 0.5s ease;
 
+}
+
+.btn:hover {
+	transform: scale(1.05);
+}
+
+.primary {
+  background-color: #79b87d;
+  border: 2px solid #79b87d;
+
+}
+
+.secondary {
+  background-color: #9c18a3;
+  border: 2px solid #9c18a3;
 }
