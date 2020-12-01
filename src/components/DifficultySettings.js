@@ -2,7 +2,13 @@ import React from 'react';
 
 const DifficultySettings = props => {
   const handleChange = event => {
-    props.setDifficulty(event.target.value)
+    if (event.target.value === 'beginner') {
+      props.setTimeLimit(10000)
+    } else if (event.target.value === 'intermediate') {
+      props.setTimeLimit(5000)
+    } else if (event.target.value === 'advanced') {
+      props.setTimeLimit(2000)
+    }
   }
   
   return (

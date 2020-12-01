@@ -5,8 +5,9 @@ import ChoiceItem from './ChoiceItem';
 const ChoiceList = props => {  
   return (
     <div className="choice-container" >
-      { props.choices.map(choice => (
+      { props.choices.map((choice, index) => (
           <ChoiceItem 
+            key={ index }
             choice={ choice }
             correctAnswer={ props.correctAnswer }
             evaluateInput={ props.evaluateInput }

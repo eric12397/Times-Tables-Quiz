@@ -36,7 +36,7 @@ const TimesTableList = props => {
         </div>
 
         <div className='options'>
-          <DifficultySettings setDifficulty={ props.setDifficulty } />
+          <DifficultySettings setTimeLimit={ props.setTimeLimit } />
         </div> 
 
         <div className='options'>

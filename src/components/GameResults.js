@@ -1,8 +1,15 @@
 import './Results.css';
 import React from 'react';
 import Button from './Button';
+import formatTime from '../formatTime';
 
 const GameResults = props => {
+  
+  let sum = 0;
+  for (let i=0; i<props.timePerQuestion.length; i++) {
+    sum += props.timePerQuestion[i];
+  }
+  const avg = formatTime(sum / props.timePerQuestion.length);
 
   return (
     <React.Fragment>
@@ -13,7 +20,11 @@ const GameResults = props => {
         </tr>
         <tr>
           <td>Average Time per Question</td>
-          <td>3.29 secs</td>
+          <td>{ avg.seconds }.{ avg.milliseconds } secs</td>
+        </tr>
+        <tr>
+          <td>Questions Answered Correctly</td>
+          <td>{ props.questionsAnswered }</td>
         </tr>
       </table>
 

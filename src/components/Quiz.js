@@ -4,32 +4,49 @@ import QuestionContainer from './QuestionContainer';
 import Timer from './Timer';
 import ChoiceList from './ChoiceList';
 import QuizResults from './QuizResults';
+import useInterval from '../hooks/useInterval';
+import formatTime from '../formatTime'
 
 const Quiz = ({ 
   selectedTimesTables, 
   questionLimit, 
-  difficulty, 
+  timeLimit, 
   backToMenu, 
   isQuizActive, 
   setIsQuizActive 
 }) => {
   const [firstFactor, setFirstFactor] = useState(null);
   const [secondFactor, setSecondFactor] = useState(null);
-  const [choices, setChoices] = useState(['a', 'b', 'c', 'd']);
-  const [userAnswer, setUserAnswer] = useState(null);
+  const [choices, setChoices] = useState([]);
+  const [userAnswer, setUserAnswer] = useState(0);
   const [results, setResults] = useState([]);
 
   const [questionCount, setQuestionCount] = useState(1);
   const [numCorrect, setNumCorrect] = useState(0);
   const [numIncorrect, setNumIncorrect] = useState(0);
-  const [timer, setTimer] = useState(100);
-  
+
   const [isAnswered, setIsAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isPending, setIsPending] = useState(false);
-  const [isTimerActive, setIsTimerActive] = useState(true);
   const [showResults, setShowResults] = useState(false);
-  
+
+  const [timer, setTimer] = useState(100);
+  const [isTimerActive, setIsTimerActive] = useState(true);
+
+  const [prevTime, setPrevTime] = useState(null);
+  const [timeElapsed, setTimeElapsed] = useState(0);
+
+  useInterval(
+    () => {
+      let prev = prevTime ? prevTime : Date.now();
+      let diffTime = Date.now() - prev;
+      let newMilliTime = timeElapsed + diffTime;
+      setPrevTime(Date.now());
+      setTimeElapsed(newMilliTime);
+    },
+    isTimerActive ? 10 : null
+  );
+
   const evaluateInput = userInput => {
     if (firstFactor * secondFactor === userInput) {
       setNumCorrect(number => number + 1);
@@ -38,30 +55,30 @@ const Quiz = ({
       setNumIncorrect(number => number + 1);
       setIsCorrect(false)
     }
+    
     setUserAnswer(userInput);
     setIsAnswered(true);
   }
 
-  const getDecrement = () => {
-    let decrement = null;
-    if (difficulty === 'beginner') {
-      decrement = 10; // 10 secs per question
-    } else if (difficulty === 'intermediate') {
-      decrement = 20; // 5 secs per question
-    } else {
-      decrement = 50 // 2 secs per question
-    }
-    return decrement
+  const recordResults = () => {
+    const newResult = {
+      questionCount, 
+      firstFactor, 
+      secondFactor, 
+      correctAnswer: firstFactor * secondFactor, 
+      userAnswer,
+      timeElapsed: timeElapsed
+    };
+    setResults(prevResults => [ ...prevResults, newResult ]);
   }
 
   const runTimer = () => {
-    const decrement = getDecrement();
     let interval = null;
     if (isTimerActive) {
-      setTimer(timer => timer - decrement);
+      setTimer(timer => timer - 1);
       interval = setInterval(() => {
-        setTimer(timer => timer - decrement);
-      }, 1000);
+        setTimer(timer => timer - 1);
+      }, timeLimit/100);
     } else if (!isTimerActive) {
       clearInterval(interval);
     }
@@ -69,8 +86,13 @@ const Quiz = ({
   }
 
   const resetTimer = () => {
-    setIsTimerActive(false);
+    setIsTimerActive(false); 
     setTimer(100);
+  }
+
+  const resetStopwatch = () => {
+    setPrevTime(null);
+    setTimeElapsed(0);
   }
 
   const getNewQuestion = () => {
@@ -110,7 +132,7 @@ const Quiz = ({
 
   useEffect(getNewQuestion, [selectedTimesTables]);
 
-  useEffect(runTimer, [isTimerActive, difficulty]);
+  useEffect(runTimer, [isTimerActive, timeLimit]);
 
   useEffect(() => {
     if (isAnswered) {
@@ -120,24 +142,19 @@ const Quiz = ({
 
   useEffect(() => {
     if (timer < 0) {
+      setTimeElapsed(timeLimit);
       setIsPending(true);
-      setNumIncorrect(number => number + 1);
     }
-  }, [timer]);
+  }, [timer, timeLimit]);
 
   useEffect(() => {
     if (isPending && questionCount < questionLimit) {
       // proceeds to next question
-      const newResult = {
-        questionCount,
-        firstFactor, 
-        secondFactor,
-        correctAnswer: firstFactor * secondFactor,
-        userAnswer
-      };
-      setResults(prevResults => [ ...prevResults, newResult ]);
+      recordResults();
       resetTimer();
+
       const renderNextQuestion = () => {
+        resetStopwatch();
         setIsPending(false);
         setIsCorrect(false);
         setIsAnswered(false);
@@ -148,21 +165,15 @@ const Quiz = ({
       setTimeout(renderNextQuestion, 1000);
     } else if (isPending && questionCount === questionLimit) {
       // ends quiz and shows results
-      const newResult = {
-        questionCount,
-        firstFactor, 
-        secondFactor,
-        correctAnswer: firstFactor * secondFactor,
-        userAnswer
-      };
-      setResults(prevResults => [ ...prevResults, newResult ]);
+      recordResults();
       resetTimer();
-      setTimeout(() => {
+
+      setTimeout(() => {      
         setIsTimerActive(false);
         setShowResults(true);
       }, 1000)
     }
-  }, [isPending, questionCount, questionLimit, firstFactor, secondFactor, userAnswer])
+  }, [isPending, questionCount, questionLimit])
 
   return (
     <React.Fragment>
@@ -179,6 +190,7 @@ const Quiz = ({
           <div style={{ color: 'white' }}>{ `Question: ${questionCount}/${questionLimit}` }</div>
           <div style={{ color: 'white' }}>{ `Correct: ${numCorrect}` }</div>
           <div style={{ color: 'white' }}>{ `Incorrect: ${numIncorrect}` }</div>
+          <div style={{ color: 'white' }}>{ `Time Remaining: ${formatTime(timeElapsed).seconds}:${formatTime(timeElapsed).milliseconds}` }</div>
 
           <QuestionContainer 
             firstFactor={ firstFactor } 

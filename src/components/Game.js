@@ -3,20 +3,39 @@ import QuestionContainer from './QuestionContainer';
 import Timer from './Timer';
 import ChoiceList from './ChoiceList';
 import GameResults from './GameResults';
+import useInterval from '../hooks/useInterval';
+import formatTime from '../formatTime';
 
 const Game = props => {
   const [firstFactor, setFirstFactor] = useState(null);
   const [secondFactor, setSecondFactor] = useState(null);
-  const [choices, setChoices] = useState(['a', 'b', 'c', 'd']);
+  const [choices, setChoices] = useState([]);
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(localStorage.getItem('highScore') ? localStorage.getItem('highScore') : 0);
-  const [timer, setTimer] = useState(100);
-  
+  const [questionsAnswered, setQuestionsAnswered] = useState(0);
+
   const [isCorrect, setIsCorrect] = useState(false);
   const [isPending, setIsPending] = useState(false);
-  const [isTimerActive, setIsTimerActive] = useState(true);
   const [showResults, setShowResults] = useState(false);
-  
+
+  const [timer, setTimer] = useState(100);
+  const [isTimerActive, setIsTimerActive] = useState(true);
+
+  const [timePerQuestion, setTimePerQuestion] = useState([]);
+  const [prevTime, setPrevTime] = useState(null);
+  const [timeElapsed, setTimeElapsed] = useState(0);
+
+  useInterval(
+    () => {
+      let prev = prevTime ? prevTime : Date.now();
+      let diffTime = Date.now() - prev;
+      let newMilliTime = timeElapsed + diffTime;
+      setPrevTime(Date.now());
+      setTimeElapsed(newMilliTime);
+    },
+    isTimerActive ? 10 : null
+  );
+
   const evaluateInput = userInput => {
     if (firstFactor * secondFactor === userInput) {
       setIsCorrect(true);
@@ -30,23 +49,19 @@ const Game = props => {
   const runTimer = () => {
     let interval = null;
     if (isTimerActive) {
-      setTimer(timer => timer - 3);
+      setTimer(timer => timer - 1);
       interval = setInterval(() => {
-        setTimer(timer => timer - 3);
-      }, 500);
+        setTimer(timer => timer - 1);
+      }, 100);
     } else if (!isTimerActive) {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
   }
 
-  const addTime = () => {
-    setIsTimerActive(false);
-    if (timer <= 90) {
-      setTimer(timer => timer + 10);
-    } else {
-      setTimer(100);
-    }
+  const resetStopwatch = () => {
+    setPrevTime(null);
+    setTimeElapsed(0);
   }
 
   const getNewQuestion = () => {
@@ -97,14 +112,28 @@ const Game = props => {
   useEffect(() => {
     if (isPending && isCorrect) {
       // proceeds to next question
+      setQuestionsAnswered(number => number + 1);
+      setTimePerQuestion(times => [...times, timeElapsed ])
+
+      const addTime = () => {
+        setIsTimerActive(false);
+        if (timer <= 90) {
+          setTimer(timer => timer + 10);
+        } else {
+          setTimer(100);
+        }
+      }
       addTime();
+
       const renderNextQuestion = () => {
+        resetStopwatch();
         setIsPending(false);
         setIsCorrect(false);
         setIsTimerActive(true);
         getNewQuestion();
       }
-      setTimeout(renderNextQuestion, 1000);
+      setTimeout(renderNextQuestion, 700);
+
     } else if (isPending && !isCorrect) {
       // ends quiz and shows results
       setIsTimerActive(false);
@@ -128,12 +157,15 @@ const Game = props => {
       { showResults ?
         <GameResults 
           highScore={ highScore } 
+          questionsAnswered={ questionsAnswered }
+          timePerQuestion={ timePerQuestion }
           setIsGameActive={ props.setIsGameActive }
         />
         :
         <div>
           <div style={{ color: 'white' }}>{ `Current Score: ${currentScore}` }</div>
           <div style={{ color: 'white' }}>{ `High Score: ${highScore}` }</div>
+          <div style={{ color: 'white' }}>{ `Questions Answered: ${questionsAnswered}` }</div>
 
           <QuestionContainer 
             firstFactor={ firstFactor } 

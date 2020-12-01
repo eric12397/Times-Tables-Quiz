@@ -4,7 +4,7 @@ import Quiz from './Quiz';
 
 const Menu = () => {
   const [isQuizActive, setIsQuizActive] = useState(false);
-  const [difficulty, setDifficulty] = useState(null);
+  const [timeLimit, setTimeLimit] = useState(null); // in milliseconds
   const [questionLimit, setQuestionLimit] = useState(0);
   const [timesTables, setTimesTables] = useState([
     { value: 1, isSelected: false },
@@ -49,7 +49,7 @@ const Menu = () => {
 
   const startQuiz = () => {
     const atLeastOneTimesTableSelected = timesTables.some(item => item.isSelected === true);
-    if (atLeastOneTimesTableSelected && difficulty && questionLimit !== 0) {
+    if (atLeastOneTimesTableSelected && timeLimit && questionLimit !== 0) {
       setIsQuizActive(true);
     } else {
       console.log('You must select at least one times table and difficuty.')
@@ -58,7 +58,7 @@ const Menu = () => {
 
   const backToMenu = () => {
     setIsQuizActive(false);
-    setDifficulty(null);
+    setTimeLimit(null);
     setQuestionLimit(0);
     setTimesTables(
       timesTables.map(item => ({ ...item, isSelected: false }))
@@ -70,8 +70,8 @@ const Menu = () => {
       { isQuizActive ? 
         <Quiz 
           selectedTimesTables={ selectedTimesTables } 
-         questionLimit={ questionLimit }
-          difficulty={ difficulty } 
+          questionLimit={ questionLimit }
+          timeLimit={ timeLimit } 
           backToMenu={ backToMenu }
           isQuizActive={ isQuizActive }
           setIsQuizActive={ setIsQuizActive }
@@ -80,7 +80,7 @@ const Menu = () => {
           timesTables={ timesTables } 
           selectItem={ selectItem }
           selectAll={ selectAll } 
-          setDifficulty={ setDifficulty }
+          setTimeLimit={ setTimeLimit }
           setQuestionLimit={ setQuestionLimit }
           startQuiz={ startQuiz }
         /> 
