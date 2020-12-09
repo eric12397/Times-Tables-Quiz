@@ -1,20 +1,19 @@
-.results-table {
+.table {
   color: #4da9f2;
   width: 100%;
-  overflow-x: auto;
+  overflow-x: auto
 }
 
-td, th {
+.table td, th {
   text-align: center;
   padding: 15px;
 }
 
-td {
+.table td {
   font-size: 1rem;
 }
 
-
-tr:nth-child(even) {
+.table tr:nth-child(even) {
   background-color: #373c47;
 }
 
@@ -29,4 +28,38 @@ tr:nth-child(even) {
 
 .incorrect {
   color: red;
+}
+
+@media(max-width: 576px) {
+  .quiz-results thead {
+    display:none;
+  }
+
+  .quiz-results, .quiz-results tbody, .quiz-results tr, .quiz-results td {
+    display: block;
+  }
+
+  .quiz-results td:nth-last-child(1) {
+    /*hides icons*/
+    display:none; 
+  }
+
+  .quiz-results td {
+    text-align: right;
+    position: relative;
+  }
+
+  .quiz-results td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .score { 
+    font-size: 1.25rem;
+  }
 }

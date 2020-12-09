@@ -5,8 +5,8 @@
   margin: 0 auto;
   text-align: center;
   padding: 15px;
-  font-size: 2rem;
   color: #4da9f2; 
+  font-size: 2rem;
   transition: 0.2s all
 }
 
@@ -16,4 +16,10 @@
 
 .failure-border {
 	box-shadow: 0 0 10px red;
+}
+
+@media (max-width: 576px) {
+  .question-container {
+    font-size: 1.25rem;
+  }
 }

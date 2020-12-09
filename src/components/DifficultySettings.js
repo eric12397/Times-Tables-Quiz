@@ -13,9 +13,8 @@ const DifficultySettings = props => {
   
   return (
     <React.Fragment>
-      
       <div>
-      <p> Select your difficulty </p>
+      <p>Select your difficulty</p>
         <input 
           type="radio" 
           id="beginner" 

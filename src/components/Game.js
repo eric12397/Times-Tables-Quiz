@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import './Game.css';
 import QuestionContainer from './QuestionContainer';
 import Timer from './Timer';
 import ChoiceList from './ChoiceList';
 import GameResults from './GameResults';
+import Fade from './Fade';
 import useInterval from '../hooks/useInterval';
-import formatTime from '../formatTime';
 
 const Game = props => {
   const [firstFactor, setFirstFactor] = useState(null);
@@ -12,9 +13,11 @@ const Game = props => {
   const [choices, setChoices] = useState([]);
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(localStorage.getItem('highScore') ? localStorage.getItem('highScore') : 0);
+  const [increment, setIncrement] = useState(null);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
 
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
@@ -39,10 +42,10 @@ const Game = props => {
   const evaluateInput = userInput => {
     if (firstFactor * secondFactor === userInput) {
       setIsCorrect(true);
-      setCurrentScore(score => score + 10);
     } else {
       setIsCorrect(false)
     }
+    setIsAnswered(true);
     setIsPending(true);
   }
 
@@ -52,7 +55,7 @@ const Game = props => {
       setTimer(timer => timer - 1);
       interval = setInterval(() => {
         setTimer(timer => timer - 1);
-      }, 100);
+      }, 300);
     } else if (!isTimerActive) {
       clearInterval(interval);
     }
@@ -84,8 +87,8 @@ const Game = props => {
         }
         return randomAnswers
       }
-
       const newChoices = generateRandomAnswers();
+
       const correctAnswerInNewChoices = newChoices.some(choice => choice === correctAnswer);
       if (correctAnswerInNewChoices) {
         setChoices(newChoices)
@@ -103,28 +106,43 @@ const Game = props => {
   useEffect(runTimer, [isTimerActive]);
 
   useEffect(() => {
-    if (timer < 0) {
-      setIsCorrect(false);
-      setIsPending(true);
+    if (isAnswered && timer <= 95) {
+      setTimer(prevTime => prevTime + 5);
+    } else if (isAnswered && timer > 95) {
+      setTimer(100);
+    } else if (timer < 0) {
+      setIsTimerActive(false);
+      setTimeout(() => setShowResults(true), 1000);
     }
-  }, [timer]);
+  }, [isAnswered, timer])
 
   useEffect(() => {
-    if (isPending && isCorrect) {
+    if (isAnswered && isCorrect && timeElapsed <= 1000) {
+      setIncrement('+100');
+      setCurrentScore(score => score + 100);
+
+    } else if (isAnswered && isCorrect && timeElapsed <= 2000) {
+      setIncrement('+50');
+      setCurrentScore(score => score + 50);
+
+    } else if (isAnswered && isCorrect && timeElapsed <= 3000) {
+      setIncrement('+25');
+      setCurrentScore(score => score + 25);
+
+    } else if (isAnswered && isCorrect && timeElapsed > 3000) {
+      setIncrement('+10');
+      setCurrentScore(score => score + 10);
+    } 
+  }, [isAnswered, isCorrect, increment, timeElapsed])
+
+  useEffect(() => {
+    if (isPending && isAnswered && isCorrect) {
       // proceeds to next question
+      setIsTimerActive(false);
+      setIsAnswered(false);
       setQuestionsAnswered(number => number + 1);
-      setTimePerQuestion(times => [...times, timeElapsed ])
-
-      const addTime = () => {
-        setIsTimerActive(false);
-        if (timer <= 90) {
-          setTimer(timer => timer + 10);
-        } else {
-          setTimer(100);
-        }
-      }
-      addTime();
-
+      setTimePerQuestion(times => [ ...times, timeElapsed ]);
+      
       const renderNextQuestion = () => {
         resetStopwatch();
         setIsPending(false);
@@ -137,11 +155,9 @@ const Game = props => {
     } else if (isPending && !isCorrect) {
       // ends quiz and shows results
       setIsTimerActive(false);
-      setTimeout(() => {
-        setShowResults(true);
-      }, 1000)
+      setTimeout(() => setShowResults(true), 1000);
     }
-  }, [isPending, isCorrect])
+  }, [isPending, isCorrect, isAnswered, timeElapsed])
 
   useEffect(() => {
     let newHighScore = null;
@@ -162,10 +178,24 @@ const Game = props => {
           setIsGameActive={ props.setIsGameActive }
         />
         :
-        <div>
-          <div style={{ color: 'white' }}>{ `Current Score: ${currentScore}` }</div>
-          <div style={{ color: 'white' }}>{ `High Score: ${highScore}` }</div>
-          <div style={{ color: 'white' }}>{ `Questions Answered: ${questionsAnswered}` }</div>
+        <div className="game-board">
+
+          <div className="game-ui-wrapper">
+            <div className="left">
+              <div className="game-ui">{ `Current Score: ${currentScore}` }</div>
+              <div className="game-ui">{ `High Score: ${highScore}` }</div>
+            </div>
+
+            <div className="center">
+              <Fade in={ isPending }>
+                <p className="fade correct">{ increment }</p>
+              </Fade>
+            </div>
+
+            <div className="right">
+              <div className="game-ui">{ `Questions Answered: ${questionsAnswered}` }</div>
+            </div>
+          </div>
 
           <QuestionContainer 
             firstFactor={ firstFactor } 

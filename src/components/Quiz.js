@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import './Quiz.css';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import QuestionContainer from './QuestionContainer';
 import Timer from './Timer';
 import ChoiceList from './ChoiceList';
 import QuizResults from './QuizResults';
+import Fade from './Fade';
 import useInterval from '../hooks/useInterval';
-import formatTime from '../formatTime'
 
 const Quiz = ({ 
   selectedTimesTables, 
@@ -18,14 +19,13 @@ const Quiz = ({
   const [firstFactor, setFirstFactor] = useState(null);
   const [secondFactor, setSecondFactor] = useState(null);
   const [choices, setChoices] = useState([]);
-  const [userAnswer, setUserAnswer] = useState(0);
+  const [userAnswer, setUserAnswer] = useState(null);
   const [results, setResults] = useState([]);
 
   const [questionCount, setQuestionCount] = useState(1);
   const [numCorrect, setNumCorrect] = useState(0);
   const [numIncorrect, setNumIncorrect] = useState(0);
 
-  const [isAnswered, setIsAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -57,7 +57,7 @@ const Quiz = ({
     }
     
     setUserAnswer(userInput);
-    setIsAnswered(true);
+    setIsPending(true);
   }
 
   const recordResults = () => {
@@ -67,7 +67,7 @@ const Quiz = ({
       secondFactor, 
       correctAnswer: firstFactor * secondFactor, 
       userAnswer,
-      timeElapsed: timeElapsed
+      timeElapsed
     };
     setResults(prevResults => [ ...prevResults, newResult ]);
   }
@@ -83,11 +83,6 @@ const Quiz = ({
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }
-
-  const resetTimer = () => {
-    setIsTimerActive(false); 
-    setTimer(100);
   }
 
   const resetStopwatch = () => {
@@ -135,14 +130,10 @@ const Quiz = ({
   useEffect(runTimer, [isTimerActive, timeLimit]);
 
   useEffect(() => {
-    if (isAnswered) {
-      setIsPending(true);
-    } 
-  }, [isAnswered]);
-
-  useEffect(() => {
-    if (timer < 0) {
+    if (timer < -10) {
       setTimeElapsed(timeLimit);
+      setNumIncorrect(number => number + 1);
+      setUserAnswer(null);
       setIsPending(true);
     }
   }, [timer, timeLimit]);
@@ -151,13 +142,13 @@ const Quiz = ({
     if (isPending && questionCount < questionLimit) {
       // proceeds to next question
       recordResults();
-      resetTimer();
+      setIsTimerActive(false); 
+      setTimer(100);
 
       const renderNextQuestion = () => {
         resetStopwatch();
         setIsPending(false);
         setIsCorrect(false);
-        setIsAnswered(false);
         setQuestionCount(count => count + 1);
         setIsTimerActive(true);
         getNewQuestion();
@@ -166,31 +157,43 @@ const Quiz = ({
     } else if (isPending && questionCount === questionLimit) {
       // ends quiz and shows results
       recordResults();
-      resetTimer();
-
-      setTimeout(() => {      
-        setIsTimerActive(false);
-        setShowResults(true);
-      }, 1000)
+      setIsTimerActive(false); 
+      setTimeout(() => setShowResults(true), 1000);
     }
   }, [isPending, questionCount, questionLimit])
+
+  let text;
+  if (isCorrect && isPending) text = <p className="fade correct">Correct</p>;
+  else if (!isCorrect && isPending) text = <p className="fade incorrect">Incorrect</p>;
 
   return (
     <React.Fragment>
       { showResults ?
         <QuizResults 
           backToMenu={ backToMenu } 
-          score={ numCorrect / questionLimit * 100 }
+          score={ (numCorrect / questionLimit * 100).toFixed(2) }
           results={ results }
         /> 
         :
-        <div>
+        <div className="quiz-board">
           <RiArrowGoBackLine onClick={ backToMenu } style={{ color: '#4da9f2' }}/>
           
-          <div style={{ color: 'white' }}>{ `Question: ${questionCount}/${questionLimit}` }</div>
-          <div style={{ color: 'white' }}>{ `Correct: ${numCorrect}` }</div>
-          <div style={{ color: 'white' }}>{ `Incorrect: ${numIncorrect}` }</div>
-          <div style={{ color: 'white' }}>{ `Time Remaining: ${formatTime(timeElapsed).seconds}:${formatTime(timeElapsed).milliseconds}` }</div>
+          <div className="quiz-ui-wrapper">
+            <div className="left">
+              <div className="quiz-ui">{ `Correct: ${numCorrect}` }</div>
+              <div className="quiz-ui">{ `Incorrect: ${numIncorrect}` }</div>
+            </div>
+
+            <div className="center">
+              <Fade in={ isPending }>
+                <p>{text}</p>
+              </Fade>
+            </div>
+
+            <div className="right"> 
+              <div className="quiz-ui">{ `Question: ${questionCount}/${questionLimit}` }</div>
+            </div>
+          </div>
 
           <QuestionContainer 
             firstFactor={ firstFactor } 

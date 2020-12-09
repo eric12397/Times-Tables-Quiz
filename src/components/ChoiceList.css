@@ -2,7 +2,7 @@
   display: flex;                       
   flex-wrap: wrap;                    
   justify-content: space-around;
-  margin: 40px;
+  margin: 30px;
 }
 
 .choice {
@@ -41,3 +41,11 @@
   color: white;
   pointer-events: none;
 }
+
+@media (max-width: 576px) {
+  .choice {
+    font-size: 1.25rem;
+  }
+}
+
+

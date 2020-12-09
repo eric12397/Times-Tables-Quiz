@@ -15,10 +15,11 @@ const GameIntro = () => {
         <Game setIsGameActive={ setIsGameActive }/> : 
 
         <div className="intro-container">
-          <div className="intro-message">Welcome to Times Table Trials! 
+          <p className="intro-message">
+          Welcome to Times Table Trials! 
           Race against the clock to show off your multiplication skills to players around the world. 
-          Answer questions correctly to add time. 
-          </div>
+          Answer questions correctly to add more time. The faster you answer, the more points you score!  
+          </p>
 
           <div className="options-wrapper">
             <div className="options">

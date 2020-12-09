@@ -1,0 +1,50 @@
+.game-ui-wrapper {
+  display: flex;                  
+  flex-direction: row;            
+  flex-wrap: nowrap;             
+  justify-content: space-between;
+  height: 75px; 
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.game-ui {
+  color: white;
+}
+
+@media (max-width: 576px) {
+    .game-ui {
+      font-size: 12px;
+      width: 80px;
+    }
+}
+
+@media (min-width: 576px) {
+    .game-ui {
+      font-size: 14px;
+    }
+}
+
+@media (min-width: 768px) {
+    .game-ui {
+      font-size: 16px;
+    }
+}
+
+@media (min-width: 992px) {
+    .game-ui {
+      font-size: 18px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .game-ui {
+      font-size: 20px;
+    }
+}

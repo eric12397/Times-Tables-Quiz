@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@1,200&display=swap');
+
 body {
-  background: #deeeff
+  background: #deeeff;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .options-wrapper {
@@ -11,3 +14,5 @@ body {
   margin: 20px;
   color: #4da9f2;
 }
+
+

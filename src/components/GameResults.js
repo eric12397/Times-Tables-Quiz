@@ -13,7 +13,8 @@ const GameResults = props => {
 
   return (
     <React.Fragment>
-      <table className="results-table">
+      <table className="table game-results">
+        <tbody>
         <tr>
           <td>Your High Score</td>
           <td>{ props.highScore }</td>
@@ -26,6 +27,7 @@ const GameResults = props => {
           <td>Questions Answered Correctly</td>
           <td>{ props.questionsAnswered }</td>
         </tr>
+        </tbody>
       </table>
 
       <div className="options-wrapper">
