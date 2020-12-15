@@ -1,5 +1,4 @@
 .table {
-  color: #4da9f2;
   width: 100%;
   overflow-x: auto
 }
@@ -9,7 +8,15 @@
   padding: 15px;
 }
 
+.table th {
+  color: #4da9f2;
+}
+
 .table td {
+  color: #d4d4d4;
+}
+
+.leaderboard td {
   font-size: 1rem;
 }
 
@@ -31,25 +38,25 @@
 }
 
 @media(max-width: 576px) {
-  .quiz-results thead {
+  .responsive thead {
     display:none;
   }
 
-  .quiz-results, .quiz-results tbody, .quiz-results tr, .quiz-results td {
+  .responsive, .responsive tbody, .responsive tr, .responsive td {
     display: block;
   }
 
-  .quiz-results td:nth-last-child(1) {
+  .responsive td:nth-last-child(1) {
     /*hides icons*/
     display:none; 
   }
 
-  .quiz-results td {
+  .responsive td {
     text-align: right;
     position: relative;
   }
 
-  .quiz-results td::before {
+  .responsive td::before {
     content: attr(data-label);
     position: absolute;
     left: 0;

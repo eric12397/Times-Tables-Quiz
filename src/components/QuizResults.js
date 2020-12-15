@@ -15,10 +15,15 @@ const QuizResults = props => {
 
   return (
     <div>
-      <RiArrowGoBackLine onClick={ props.backToMenu } style={{ color: '#4da9f2' }}/>
+      <RiArrowGoBackLine 
+        onClick={ props.backToMenu } 
+        style={{ color: '#4da9f2' }}
+      />
       <h2 className="score">You scored { props.score }%</h2>
+
       <h2 className="score">Average Time per Question: { avg.seconds }.{ avg.milliseconds } secs</h2>
-      <table className="table quiz-results">
+      
+      <table className="table responsive">
         <thead>
         <tr>
           <th>#</th>

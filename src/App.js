@@ -1,14 +1,24 @@
 import './App.css';
+import React, { useEffect } from 'react';
+import { loadUser } from './redux/actions/auth';
 import { BrowserRouter as Router } from "react-router-dom";
+import { Provider } from 'react-redux';
 import MenuContainer from './components/MenuContainer';
-import Header from './components/Header';
+import Navbar from './components/Navbar';
+import store from './redux/store';
 
 const App = () => {
+  useEffect(() => {
+    store.dispatch(loadUser())
+  }, [])
+
   return (
-    <Router>
-      <Header />
-      <MenuContainer />
-    </Router>
+    <Provider store={ store }>
+      <Router>
+        <Navbar />
+        <MenuContainer />
+      </Router>
+    </Provider>
   );
 }
 

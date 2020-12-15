@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './Quiz.css';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import QuestionContainer from './QuestionContainer';
@@ -19,7 +19,6 @@ const Quiz = ({
   const [firstFactor, setFirstFactor] = useState(null);
   const [secondFactor, setSecondFactor] = useState(null);
   const [choices, setChoices] = useState([]);
-  const [userAnswer, setUserAnswer] = useState(null);
   const [results, setResults] = useState([]);
 
   const [questionCount, setQuestionCount] = useState(1);
@@ -47,6 +46,11 @@ const Quiz = ({
     isTimerActive ? 10 : null
   );
 
+  const resetStopwatch = () => {
+    setPrevTime(null);
+    setTimeElapsed(0);
+  }
+
   const evaluateInput = userInput => {
     if (firstFactor * secondFactor === userInput) {
       setNumCorrect(number => number + 1);
@@ -56,20 +60,18 @@ const Quiz = ({
       setIsCorrect(false)
     }
     
-    setUserAnswer(userInput);
-    setIsPending(true);
-  }
-
-  const recordResults = () => {
     const newResult = {
-      questionCount, 
-      firstFactor, 
-      secondFactor, 
-      correctAnswer: firstFactor * secondFactor, 
-      userAnswer,
-      timeElapsed
-    };
+        questionCount, 
+        firstFactor, 
+        secondFactor, 
+        correctAnswer: firstFactor * secondFactor, 
+        userAnswer: userInput,
+        timeElapsed
+      };
+
     setResults(prevResults => [ ...prevResults, newResult ]);
+
+    setIsPending(true);
   }
 
   const runTimer = () => {
@@ -85,63 +87,70 @@ const Quiz = ({
     return () => clearInterval(interval);
   }
 
-  const resetStopwatch = () => {
-    setPrevTime(null);
-    setTimeElapsed(0);
-  }
+  const getNewQuestion = useCallback(
+    () => {
+      const index = Math.floor(Math.random() * selectedTimesTables.length);
+      const first = selectedTimesTables[index];
+      const second = Math.floor(Math.random() * 12) + 1;
+      const correctAnswer = first * second;
+      setFirstFactor(first);
+      setSecondFactor(second);
+      
+      const getNewChoices = () => {
+        const generateRandomAnswers = () => {
+          const min = correctAnswer - 10 > 0 ? correctAnswer - 10 : 0; // ensures that min is not a negative integer
+          const max = correctAnswer + 10;
+          const range = Array.from({length:max-min+1},(v,k)=>k+min);
 
-  const getNewQuestion = () => {
-    const index = Math.floor(Math.random() * selectedTimesTables.length);
-    const first = selectedTimesTables[index];
-    const second = Math.floor(Math.random() * 12) + 1;
-    const correctAnswer = first * second;
-    setFirstFactor(first);
-    setSecondFactor(second);
-    
-    const getNewChoices = () => {
-      const generateRandomAnswers = () => {
-        const min = correctAnswer - 10 > 0 ? correctAnswer - 10 : 0; // ensures that min is not a negative integer
-        const max = correctAnswer + 10;
-        const range = Array.from({length:max-min+1},(v,k)=>k+min);
-
-        let randomAnswers = [];
-        for (let i = 0; i < 4; i++) {
-          const randomValueFromRange = range.splice(Math.floor(Math.random() * range.length), 1)[0];
-          randomAnswers.push(randomValueFromRange);
+          let randomAnswers = [];
+          for (let i = 0; i < 4; i++) {
+            const randomValueFromRange = range.splice(Math.floor(Math.random() * range.length), 1)[0];
+            randomAnswers.push(randomValueFromRange);
+          }
+          return randomAnswers
         }
-        return randomAnswers
-      }
 
-      const newChoices = generateRandomAnswers();
-      const correctAnswerInNewChoices = newChoices.some(choice => choice === correctAnswer);
-      if (correctAnswerInNewChoices) {
-        setChoices(newChoices)
-      } else {
-        const randomIndex = Math.floor(Math.random() * newChoices.length);
-        newChoices[randomIndex] = correctAnswer // insert correct answer in set of choices
-        setChoices(newChoices)
+        const newChoices = generateRandomAnswers();
+        const correctAnswerInNewChoices = newChoices.some(choice => choice === correctAnswer);
+        if (correctAnswerInNewChoices) {
+          setChoices(newChoices)
+        } else {
+          const randomIndex = Math.floor(Math.random() * newChoices.length);
+          newChoices[randomIndex] = correctAnswer // insert correct answer in set of choices
+          setChoices(newChoices)
+        }
       }
-    }
-    getNewChoices()
-  }
+      getNewChoices()
+      },
+    [selectedTimesTables],
+  )
 
-  useEffect(getNewQuestion, [selectedTimesTables]);
+  useEffect(() => getNewQuestion(), [getNewQuestion]);
 
   useEffect(runTimer, [isTimerActive, timeLimit]);
 
   useEffect(() => {
     if (timer < -10) {
-      setTimeElapsed(timeLimit);
       setNumIncorrect(number => number + 1);
-      setUserAnswer(null);
+
+      const newResult = {
+        questionCount, 
+        firstFactor, 
+        secondFactor, 
+        correctAnswer: firstFactor * secondFactor, 
+        userAnswer: null,
+        timeElapsed: timeLimit
+      };
+
+      setResults(prevResults => [ ...prevResults, newResult ]);
+
       setIsPending(true);
     }
-  }, [timer, timeLimit]);
+  }, [timer, timeLimit, questionCount, firstFactor, secondFactor]);
 
   useEffect(() => {
     if (isPending && questionCount < questionLimit) {
       // proceeds to next question
-      recordResults();
       setIsTimerActive(false); 
       setTimer(100);
 
@@ -153,18 +162,20 @@ const Quiz = ({
         setIsTimerActive(true);
         getNewQuestion();
       }
+
       setTimeout(renderNextQuestion, 1000);
     } else if (isPending && questionCount === questionLimit) {
       // ends quiz and shows results
-      recordResults();
       setIsTimerActive(false); 
       setTimeout(() => setShowResults(true), 1000);
     }
-  }, [isPending, questionCount, questionLimit])
+  }, [isPending, questionCount, questionLimit, getNewQuestion])
 
   let text;
-  if (isCorrect && isPending) text = <p className="fade correct">Correct</p>;
-  else if (!isCorrect && isPending) text = <p className="fade incorrect">Incorrect</p>;
+  if (isCorrect && isPending) 
+    text = <p className="fade correct">Correct</p>;
+  else if (!isCorrect && isPending) 
+    text = <p className="fade incorrect">Incorrect</p>;
 
   return (
     <React.Fragment>
@@ -176,7 +187,10 @@ const Quiz = ({
         /> 
         :
         <div className="quiz-board">
-          <RiArrowGoBackLine onClick={ backToMenu } style={{ color: '#4da9f2' }}/>
+          <RiArrowGoBackLine 
+            onClick={ backToMenu } 
+            style={{ color: '#4da9f2' }}
+          />
           
           <div className="quiz-ui-wrapper">
             <div className="left">

@@ -18,10 +18,25 @@
   color: white;
 }
 
+.message-container {
+  margin: 20px;
+}
+
+.message {
+  margin: 20px;
+  color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #373c47;
+}
+
 @media (max-width: 576px) {
     .game-ui {
       font-size: 12px;
       width: 80px;
+    }
+    .message {
+      font-size: 18px;
     }
 }
 
@@ -29,11 +44,17 @@
     .game-ui {
       font-size: 14px;
     }
+    .message {
+      font-size: 24px;
+    }
 }
 
 @media (min-width: 768px) {
     .game-ui {
       font-size: 16px;
+    }
+    .message {
+      font-size: 26px;
     }
 }
 
@@ -41,10 +62,17 @@
     .game-ui {
       font-size: 18px;
     }
+    .message {
+      font-size: 28px;
+    }
 }
 
 @media (min-width: 1200px) {
     .game-ui {
       font-size: 20px;
     }
+    .message {
+      font-size: 30px;
+    }
 }
+

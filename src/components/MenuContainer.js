@@ -2,6 +2,7 @@ import './MenuContainer.css';
 import React from 'react';
 import Menu from './Menu';
 import GameIntro from './GameIntro';
+import Leaderboard from './Leaderboard';
 import { Route, Switch } from 'react-router-dom';
 
 const MenuContainer = () => {
@@ -9,7 +10,7 @@ const MenuContainer = () => {
     <div className="menu-container">
       <div className="menu-content">
         <Switch>
-          <Route exact path="/leaderboard" />
+          <Route exact path="/leaderboard" component={ Leaderboard }/>
           <Route exact path="/game" component={ GameIntro } />
           <Route exact path="/" component={ Menu } />
         </Switch>

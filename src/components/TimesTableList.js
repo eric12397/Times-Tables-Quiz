@@ -28,11 +28,11 @@ const TimesTableList = props => {
 
       <div className="options-wrapper">
         <div className='options'>
-          <Button onClick={ props.startQuiz } color='primary'>Practice</Button>
+          <Button handleClick={ props.startQuiz } color='primary'>Practice</Button>
         </div>
 
         <div className='options'>
-          <Button onClick={ props.selectAll } color='primary'>Select All</Button>
+          <Button handleClick={ props.selectAll } color='primary'>Select All</Button>
         </div>
 
         <div className='options'>
@@ -44,7 +44,7 @@ const TimesTableList = props => {
         </div>
 
         <div className='options'>
-          <Button onClick={ () => history.push('./game') } color='secondary'>Times Table Trials</Button>
+          <Button handleClick={ () => history.push('./game') } color='secondary'>Times Table Trials</Button>
         </div>
       </div>
     </React.Fragment>

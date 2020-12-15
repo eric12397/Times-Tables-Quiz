@@ -1,14 +1,11 @@
 import React from 'react';
 import './Button.css';
 
-const Button = props => {
-  const handleClick = () => {
-    props.onClick()
-  }
+const Button = ({ type = "button", color, handleClick, children }) => {
 
   return (
-    <button className={ `btn ${props.color}` } onClick={ handleClick }>
-      { props.children }
+    <button type={ type } className={ `btn ${color}` } onClick={ handleClick }>
+      { children }
     </button>
   )
 }

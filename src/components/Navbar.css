@@ -1,0 +1,33 @@
+.navbar {
+  display: flex;                  
+  flex-direction: row;
+  justify-content: space-between;
+
+  color: #4da9f2;
+  background: #373c47;
+  border-radius: 15px;
+  width: 90%;
+  height: 30px;
+  padding: 30px;
+  margin: 0 auto;
+  margin-bottom: 5px;
+  box-shadow: 2px 2px 5px black
+}
+
+.title {
+  font-size: 25px;
+  font-weight: bold
+}
+
+.navbar-right {
+  padding: 10px;
+}
+.navbar-right > span {
+  font-size: 15px;
+  margin-left: 40px;
+}
+span:hover {
+  cursor: pointer;
+  color: #3bba9c;
+}
+

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './Game.css';
 import QuestionContainer from './QuestionContainer';
 import Timer from './Timer';
 import ChoiceList from './ChoiceList';
@@ -45,6 +44,7 @@ const Game = props => {
     } else {
       setIsCorrect(false)
     }
+    
     setIsAnswered(true);
     setIsPending(true);
   }
@@ -108,8 +108,10 @@ const Game = props => {
   useEffect(() => {
     if (isAnswered && timer <= 95) {
       setTimer(prevTime => prevTime + 5);
+
     } else if (isAnswered && timer > 95) {
       setTimer(100);
+
     } else if (timer < 0) {
       setIsTimerActive(false);
       setTimeout(() => setShowResults(true), 1000);
@@ -140,6 +142,7 @@ const Game = props => {
       // proceeds to next question
       setIsTimerActive(false);
       setIsAnswered(false);
+
       setQuestionsAnswered(number => number + 1);
       setTimePerQuestion(times => [ ...times, timeElapsed ]);
       
@@ -150,6 +153,7 @@ const Game = props => {
         setIsTimerActive(true);
         getNewQuestion();
       }
+
       setTimeout(renderNextQuestion, 700);
 
     } else if (isPending && !isCorrect) {
@@ -161,10 +165,12 @@ const Game = props => {
 
   useEffect(() => {
     let newHighScore = null;
+
     if (currentScore > highScore) {
       newHighScore = currentScore;
       setHighScore(newHighScore);
     }
+
     return () => localStorage.setItem('highScore', newHighScore || highScore)
   }, [currentScore, highScore])
 
@@ -172,6 +178,7 @@ const Game = props => {
     <React.Fragment>
       { showResults ?
         <GameResults 
+          currentScore={ currentScore }
           highScore={ highScore } 
           questionsAnswered={ questionsAnswered }
           timePerQuestion={ timePerQuestion }

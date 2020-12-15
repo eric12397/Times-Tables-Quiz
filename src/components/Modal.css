@@ -1,0 +1,46 @@
+.modal-wrapper {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	animation: show .2s;
+	transform: scale(1);
+}
+
+@keyframes show {
+  from{
+  	opacity: 0;
+  } to {
+  	opacity: 1;
+  }
+}
+
+.modal-backdrop {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;	
+	background-color: rgba(0,0,0,0.3)
+}
+
+.modal-content {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	width: 50%;
+	padding: 30px;
+	transform: translate(-50%, -50%);
+	background: #202833;
+  	box-shadow: 3px 3px 8px black;
+  	z-index: 500;
+  	overflow-y: auto;
+}
+
+.modal-content > p {
+	position: absolute;
+	cursor: pointer
+}
