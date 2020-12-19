@@ -1,6 +1,9 @@
-import React, { useEffect } from 'react';
-import './Results.css';
+import './stats/Table.css';
+import React, { useState, useEffect } from 'react';
 import Spinner from './Spinner';
+import Total from './stats/Total';
+import Average from './stats/Average';
+import PersonalRecord from './stats/PersonalRecord';
 import { fetchStats } from '../redux/actions/stats';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -8,54 +11,56 @@ import { RiArrowGoBackLine } from 'react-icons/ri';
 
 const Leaderboard = ({ isAuthenticated, isLoading, fetchStats, stats }) => {
   const history = useHistory();
+  const [show, setShow] = useState({ 
+    total: true, average: false, personal: false 
+  })
+
+  const showTotal = () => setShow({ ...show, total: true, average: false, personal: false });
+
+  const showAverage = () => setShow({ ...show, total: false, average: true, personal: false });
+
+  const showPersonalRecord = () => setShow({ ...show, total: false, average: false, personal: true });
 
   useEffect(() => {
     if (isAuthenticated) fetchStats();
   }, [fetchStats, isAuthenticated]);
 
   let content;
-  if (!isAuthenticated) 
-    content = <Spinner />
-  else if (isAuthenticated && isLoading) 
-    content = <div className="message">Loading</div>
-  else if (stats) 
-    content = 
-        <table className="table responsive leaderboard">
-          <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Player</th>
-            <th>High Score</th>
-            <th>Questions Answered</th>
-            <th>Avg Time per Question</th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td data-label="Rank">1</td>
-              <td data-label="Player">TestUser</td>
-              <td data-label="High Score">353675</td>
-              <td data-label="Questions Answered">56</td>
-              <td data-label="Avg Time per Question">1.678</td>
-              <td></td>
-            </tr> 
-            <tr>
-              <td data-label="Rank">2</td>
-              <td data-label="Player">Navegante</td>
-              <td data-label="High Score">2222</td>
-              <td data-label="Questions Answered">12</td>
-              <td data-label="Avg Time per Question">2.391</td>
-              <td></td>
-            </tr> 
-         </tbody>
-        </table>
 
+  if (!isAuthenticated) 
+    content = <div className="message">Please log in to view our leaderboard</div>
+
+  else if (isAuthenticated && isLoading) 
+    content = <Spinner />
+
+  else if (stats && show.total) 
+    content = <Total stats={ stats }/>
+      
+  else if (stats && show.average)
+    content = <Average stats={ stats }/>
+  
+  else if (stats && show.personal)
+    content = <PersonalRecord stats={ stats }/>
+      
   return (
     <div>
       <RiArrowGoBackLine 
         onClick={ () => history.push('/') } 
         style={{ color: '#4da9f2' }}
       />
+      { isAuthenticated ? 
+        <div>
+          <button onClick={ showTotal }>
+            Total
+          </button>
+          <button onClick={ showAverage }>
+            Average
+          </button>
+          <button onClick={ showPersonalRecord }>
+            Personal Record
+          </button>
+        </div> : "" }
+      
       { content }
     </div>
   )

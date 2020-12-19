@@ -1,17 +1,18 @@
-import './Results.css';
+import './Table.css';
 import React from 'react';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import { BiCheckCircle } from 'react-icons/bi';
 import { VscError } from 'react-icons/vsc';
-import formatTime from '../formatTime'
+import { toSeconds } from '../../time'
 
 const QuizResults = props => {
 
+  // calculate the average time per question
   let sum = 0;
   for (let i=0; i<props.results.length; i++) {
     sum += props.results[i].timeElapsed;
   }
-  const avg = formatTime(sum / props.results.length)
+  const avg = toSeconds(sum / props.results.length)
 
   return (
     <div>
@@ -21,9 +22,11 @@ const QuizResults = props => {
       />
       <h2 className="score">You scored { props.score }%</h2>
 
-      <h2 className="score">Average Time per Question: { avg.seconds }.{ avg.milliseconds } secs</h2>
+      <h2 className="score">
+        Avg Time: { avg } secs
+      </h2>
       
-      <table className="table responsive">
+      <table className="table responsive quiz-results">
         <thead>
         <tr>
           <th>#</th>
@@ -35,12 +38,11 @@ const QuizResults = props => {
         </thead>
         <tbody>
         { props.results.map(result => {
-          const timeElapsed = formatTime(result.timeElapsed) 
           return (
             <tr>
               <td data-label="#">{result.questionCount}.</td>
               <td data-label="Question">{result.firstFactor} x {result.secondFactor}</td>
-              <td data-label="Time (secs)">{timeElapsed.seconds}.{timeElapsed.milliseconds}</td>
+              <td data-label="Time (secs)">{ toSeconds(result.timeElapsed) }</td>
               <td data-label="Correct Answer">{result.correctAnswer}</td>
               <td data-label="Your Answer">{result.userAnswer ? result.userAnswer : 'N/A'}</td>
               <td>

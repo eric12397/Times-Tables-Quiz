@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import QuestionContainer from './QuestionContainer';
 import Timer from './Timer';
 import ChoiceList from './ChoiceList';
-import GameResults from './GameResults';
+import GameResults from './stats/GameResults';
 import Fade from './Fade';
 import useInterval from '../hooks/useInterval';
 
@@ -11,10 +11,15 @@ const Game = props => {
   const [secondFactor, setSecondFactor] = useState(null);
   const [choices, setChoices] = useState([]);
   const [currentScore, setCurrentScore] = useState(0);
-  const [highScore, setHighScore] = useState(localStorage.getItem('highScore') ? localStorage.getItem('highScore') : 0);
+  const [currentQuestions, setCurrentQuestions] = useState(0);
+  const [highScore, setHighScore] = useState(
+    localStorage.getItem('highScore') ? localStorage.getItem('highScore') : 0
+  );
+  const [highQuestions, setHighQuestions] = useState(
+    localStorage.getItem('highQuestions') ? localStorage.getItem('highQuestions') : 0
+  );
   const [increment, setIncrement] = useState(null);
-  const [questionsAnswered, setQuestionsAnswered] = useState(0);
-
+  
   const [isCorrect, setIsCorrect] = useState(false);
   const [isAnswered, setIsAnswered] = useState(false);
   const [isPending, setIsPending] = useState(false);
@@ -143,7 +148,7 @@ const Game = props => {
       setIsTimerActive(false);
       setIsAnswered(false);
 
-      setQuestionsAnswered(number => number + 1);
+      setCurrentQuestions(number => number + 1);
       setTimePerQuestion(times => [ ...times, timeElapsed ]);
       
       const renderNextQuestion = () => {
@@ -163,16 +168,26 @@ const Game = props => {
     }
   }, [isPending, isCorrect, isAnswered, timeElapsed])
 
-  useEffect(() => {
+  useEffect(() => { 
+    // updates high score and questions
     let newHighScore = null;
+    let newHighQuestions = null;
 
     if (currentScore > highScore) {
       newHighScore = currentScore;
       setHighScore(newHighScore);
     }
 
-    return () => localStorage.setItem('highScore', newHighScore || highScore)
-  }, [currentScore, highScore])
+    if (currentQuestions > highQuestions) {
+      newHighQuestions = currentQuestions;
+      setHighQuestions(newHighQuestions);
+    }
+
+    return () => {
+      localStorage.setItem('highScore', newHighScore || highScore);
+      localStorage.setItem('highQuestions', newHighQuestions || highQuestions);
+    }
+  }, [currentScore, highScore, currentQuestions, highQuestions])
 
   return (
     <React.Fragment>
@@ -180,7 +195,7 @@ const Game = props => {
         <GameResults 
           currentScore={ currentScore }
           highScore={ highScore } 
-          questionsAnswered={ questionsAnswered }
+          questionsAnswered={ currentQuestions }
           timePerQuestion={ timePerQuestion }
           setIsGameActive={ props.setIsGameActive }
         />
@@ -200,7 +215,8 @@ const Game = props => {
             </div>
 
             <div className="right">
-              <div className="game-ui">{ `Questions Answered: ${questionsAnswered}` }</div>
+              <div className="game-ui">{ `Questions Answered: ${currentQuestions}` }</div>
+              <div className="game-ui">{ `Personal Record: ${highQuestions}` }</div>
             </div>
           </div>
 

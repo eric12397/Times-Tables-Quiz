@@ -1,6 +1,5 @@
 const jwtConfig = getState => {
   const jwt = getState().auth.jwt;
-  console.log(jwt);
   
   const config = {
     headers: {

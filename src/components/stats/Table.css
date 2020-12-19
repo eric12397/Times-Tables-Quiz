@@ -46,11 +46,6 @@
     display: block;
   }
 
-  .responsive td:nth-last-child(1) {
-    /*hides icons*/
-    display:none; 
-  }
-
   .responsive td {
     text-align: right;
     position: relative;

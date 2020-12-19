@@ -15,6 +15,7 @@ const initialState = {
 export default function(state = initialState, action) {
   switch(action.type) {
     case FETCH_STATS_PENDING:
+    case UPDATE_STATS_PENDING:
       return {
         ...state,
         isLoading: true
@@ -28,6 +29,8 @@ export default function(state = initialState, action) {
       };
 
     case FETCH_STATS_FAILURE:
+    case UPDATE_STATS_SUCCESS:
+    case UPDATE_STATS_FAILURE:
       return {
         ...state, 
         stats: [],

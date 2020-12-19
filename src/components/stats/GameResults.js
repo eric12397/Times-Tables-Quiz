@@ -1,25 +1,33 @@
 import './Table.css';
 import React, { useEffect } from 'react';
-import Button from './Button';
-import formatTime from '../formatTime';
+import Button from '../Button';
+import { toSeconds } from '../../time';
+import { updateStats } from '../../redux/actions/stats';
+import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-const GameResults = props => {
+const GameResults = ({ updateStats, ...props }) => {
   const history = useHistory();
 
-  let sum = 0;
+  let totalTime = 0;
   for (let i=0; i<props.timePerQuestion.length; i++) {
-    sum += props.timePerQuestion[i];
-  }
-  const avg = formatTime(sum / props.timePerQuestion.length);
+    totalTime += props.timePerQuestion[i];
+  };
+  const avg = toSeconds(totalTime / props.timePerQuestion.length);
 
   useEffect(() => {
-    const updateStats = times => {
-      console.log("SENDING STATS");
-      console.log(props.timePerQuestion);
-    }
-    updateStats(props.timePerQuestion);
-  }, [props.timePerQuestion]);
+    const { currentScore, highScore, questionsAnswered } = props;
+    console.log(props.timePerQuestion)
+    const stats = {
+      currentScore,
+      highScore, 
+      questionsAnswered,
+      highQuestions: localStorage.getItem('highQuestions'),
+      totalTime
+    };
+
+    updateStats(stats);
+  }, [props, totalTime, updateStats]);
   
   return (
     <React.Fragment>
@@ -34,11 +42,11 @@ const GameResults = props => {
           <td>{ props.highScore }</td>
         </tr>
         <tr>
-          <td>Average Time per Question</td>
-          <td>{ avg.seconds }.{ avg.milliseconds } secs</td>
+          <td>Time/Question</td>
+          <td>{ avg } secs</td>
         </tr>
         <tr>
-          <td>Questions Answered Correctly</td>
+          <td>Questions Answered</td>
           <td>{ props.questionsAnswered }</td>
         </tr>
         </tbody>
@@ -56,4 +64,4 @@ const GameResults = props => {
   )
 }
 
-export default GameResults
+export default connect(null, { updateStats })(GameResults)

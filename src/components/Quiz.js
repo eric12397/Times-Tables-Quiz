@@ -4,7 +4,7 @@ import { RiArrowGoBackLine } from 'react-icons/ri';
 import QuestionContainer from './QuestionContainer';
 import Timer from './Timer';
 import ChoiceList from './ChoiceList';
-import QuizResults from './QuizResults';
+import QuizResults from './stats/QuizResults';
 import Fade from './Fade';
 import useInterval from '../hooks/useInterval';
 
