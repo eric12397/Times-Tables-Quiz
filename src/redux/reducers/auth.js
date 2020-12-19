@@ -31,7 +31,7 @@ export default function(state = initialState, action) {
     case LOAD_USER_SUCCESS:
       return {
         ...state,
-        user: action.payload,
+        user: action.payload.user,
         isAuthenticated: true,
         isLoading: false
       };

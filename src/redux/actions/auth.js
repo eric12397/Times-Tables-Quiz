@@ -18,7 +18,7 @@ export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: LOAD_USER_PENDING });
 
   axios
-    .get('http://localhost:5000/api/auth/user', jwtConfig(getState))
+    .get('api/auth/user', jwtConfig(getState))
     .then(response => 
       dispatch({ 
         type: LOAD_USER_SUCCESS, 
@@ -38,7 +38,7 @@ export const login = user => dispatch => {
   const body = JSON.stringify({ username, password });
 
   axios
-    .post('http://localhost:5000/api/auth/login', body, publicConfig())
+    .post('api/auth/login', body, publicConfig())
     .then(response => 
       dispatch({ 
         type: LOGIN_SUCCESS, 
@@ -62,7 +62,7 @@ export const register = user => dispatch => {
   const body = JSON.stringify({ username, password });
 
   axios
-    .post('http://localhost:5000/api/auth/register', body, publicConfig())
+    .post('api/auth/register', body, publicConfig())
     .then(response => 
       dispatch({
         type: REGISTER_SUCCESS,

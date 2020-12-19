@@ -14,7 +14,7 @@ export const fetchStats = () => (dispatch, getState) => {
   dispatch({ type: FETCH_STATS_PENDING });
 
   axios
-    .get('http://localhost:5000/api/users', jwtConfig(getState))
+    .get('api/users', jwtConfig(getState))
     .then(response => 
       dispatch({ 
         type: FETCH_STATS_SUCCESS,
@@ -30,11 +30,11 @@ export const fetchStats = () => (dispatch, getState) => {
 export const updateStats = stats => (dispatch, getState) => {
   dispatch({ type: UPDATE_STATS_PENDING });
 
-  const id = getState().auth.user._id;
+  const { id } = getState().auth.user;
   const body = JSON.stringify(stats);
 
   axios
-    .post(`http://localhost:5000/api/users/${id}/stats`, body, jwtConfig(getState))
+    .post(`api/users/${id}/stats`, body, jwtConfig(getState))
     .then(response => 
       dispatch({ 
         type: UPDATE_STATS_SUCCESS,
