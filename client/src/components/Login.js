@@ -61,7 +61,7 @@ const Login = ({ login, isAuthenticated, isLoading, error, clearErrors }) => {
 
   return (
     <React.Fragment>
-      <span onClick={ () => setIsOpen(true) }>Login</span>
+      <li onClick={ () => setIsOpen(true) }>Login</li>
 
       <Modal isOpen={ isOpen } toggle={ toggleModal }>
         <form method="post" className="form">

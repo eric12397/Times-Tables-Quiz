@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 const Logout = ({ logout }) => {
   return (
     <React.Fragment>
-      <span onClick={ logout }>Logout</span>
+      <li onClick={ logout }>Logout</li>
     </React.Fragment>
   )
 }

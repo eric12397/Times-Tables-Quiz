@@ -2,6 +2,7 @@
   display: flex;                  
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 
   color: #4da9f2;
   background: #373c47;
@@ -20,14 +21,18 @@
 }
 
 .navbar-right {
-  padding: 10px;
+  list-style: none;
+  display: flex;
 }
-.navbar-right > span {
+
+.navbar-right li {
   font-size: 15px;
   margin-left: 40px;
 }
-span:hover {
+
+.navbar-right li:hover {
   cursor: pointer;
-  color: #3bba9c;
+  color: #d4d4d4;
+  transition: all ease 0.4s
 }
 

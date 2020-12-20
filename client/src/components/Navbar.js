@@ -1,12 +1,14 @@
 import './Navbar.css';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Login from './Login';
 import Logout from './Logout';
 import Register from './Register';
 import Fade from './Fade';
 
 const Navbar = ({ isAuthenticated, user }) => {
+  const history = useHistory();
   const [welcome, setWelcome] = useState(null);
 
   useEffect(() => {
@@ -23,23 +25,19 @@ const Navbar = ({ isAuthenticated, user }) => {
 
   const userLinks = (
     <React.Fragment>
-      <span>View Leaderboard</span>
+      <li onClick={ () => history.push('/leaderboard') }>View Leaderboard</li>
       <Logout />
     </React.Fragment>
   )
 
   return (
     <nav className="navbar">
-      <div className="title">
-        <span>Times Table Trials</span>
-      </div>
-
-      <div className="navbar-right">
-        <Fade in={ isAuthenticated }>
-          <span>{ welcome }</span>
-        </Fade>
+      <span className="title">Times Table Trials</span>
+      
+      <ul className="navbar-right">
+        <Fade in={ isAuthenticated }><li>{ welcome }</li></Fade>
         { isAuthenticated ? userLinks : guestLinks }
-      </div>
+      </ul>
     </nav>
   )
 }
