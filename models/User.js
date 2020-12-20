@@ -15,15 +15,15 @@ const userSchema = new Schema({
     },
     
     totalStats: {
-      score: Number,
-      questions: Number,
-      gamesPlayed: Number,
-      timePlayed: Number,
+      score: { type: Number, default: 0 },
+      questions: { type: Number, default: 0 },
+      gamesPlayed: { type: Number, default: 0 },
+      timePlayed: { type: Number, default: 0 },
     },
 
     personalRecordStats: {
-      highScore: Number,
-      questions: Number,
+      highScore: { type: Number, default: 0 },
+      questions: { type: Number, default: 0 },
     }    
   },
   { timestamps: true });
