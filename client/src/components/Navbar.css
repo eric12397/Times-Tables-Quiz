@@ -1,38 +1,80 @@
 .navbar {
-  display: flex;                  
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-
   color: #4da9f2;
-  background: #373c47;
+  background: #202833;
   border-radius: 15px;
   width: 90%;
-  height: 30px;
-  padding: 30px;
+  padding: 10px 30px;
   margin: 0 auto;
-  margin-bottom: 5px;
-  box-shadow: 2px 2px 5px black
+  margin-bottom: 7px;
+  box-shadow: 2px 2px 5px black;
 }
 
-.title {
-  font-size: 25px;
-  font-weight: bold
-}
-
-.navbar-right {
+.navbar ul {
   list-style: none;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
-.navbar-right li {
+.navbar ul li.list-item {
   font-size: 15px;
-  margin-left: 40px;
+  text-align: center;
+  margin: 0 16px;
+  order: 4;
 }
 
-.navbar-right li:hover {
+.navbar ul li.title {
+  flex: 1;
+  font-size: 23px;
+  font-weight: 600;
+}
+
+.navbar ul .welcome {
+  font-size: 15px;
+  text-align: center;
+  margin: 0 16px;
+}
+
+.navbar ul li:hover {
   cursor: pointer;
   color: #d4d4d4;
   transition: all ease 0.4s
+}
+
+.navbar ul li.hamburger-btn{
+  display: none;
+}
+
+.navbar ul li.hamburger-btn {
+  font-size: 25px;
+}
+
+@media all and (max-width: 900px) {
+  .navbar ul li.list-item {
+    width: 100%;
+    display: none;
+    padding: 20px 0px;
+    margin-top: 10px;
+  }
+
+  .navbar ul li.list-item:hover {
+    transition: all linear 0.1s;
+    border-radius: 12px;
+    box-shadow: inset 0 0 5px #d4d4d4,
+                inset 0 0 20px #e4d4d4;
+  }
+
+  .navbar ul.show li.list-item {
+    display: block;
+  }
+
+  .navbar ul .welcome {
+    display: none;
+  }
+
+  .navbar ul li.hamburger-btn {
+    display: block;
+  }
 }
 

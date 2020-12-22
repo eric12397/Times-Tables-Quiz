@@ -78,7 +78,7 @@ const Register = ({ register, isAuthenticated, isLoading, error, clearErrors }) 
 
   return (
     <React.Fragment>
-      <li onClick={ toggleModal }>Register for a new account</li>
+      <li className="list-item" onClick={ toggleModal }>Register for a new account</li>
 
       <Modal isOpen={ isOpen } toggle={ toggleModal }>      
         <form method="post" className="form" onSubmit={ submitForm }>    

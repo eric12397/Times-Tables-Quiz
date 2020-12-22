@@ -10,6 +10,9 @@ import Fade from './Fade';
 const Navbar = ({ isAuthenticated, user }) => {
   const history = useHistory();
   const [welcome, setWelcome] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   useEffect(() => {
     if (isAuthenticated) setWelcome(`Welcome ${user.username}`);
@@ -25,18 +28,25 @@ const Navbar = ({ isAuthenticated, user }) => {
 
   const userLinks = (
     <React.Fragment>
-      <li onClick={ () => history.push('/leaderboard') }>View Leaderboard</li>
+      <li className="list-item" onClick={ () => history.push('/leaderboard') }>View Leaderboard</li>
       <Logout />
     </React.Fragment>
   )
 
   return (
     <nav className="navbar">
-      <span className="title">Times Table Trials</span>
-      
-      <ul className="navbar-right">
-        <Fade in={ isAuthenticated }><li>{ welcome }</li></Fade>
+      <ul className={`${isOpen ? 'show' : 'hide'}`}>
+        <li className="title">Times Table Trials</li>
+        
+        <Fade in={ isAuthenticated } className="welcome">
+          <li className="list-item">{`Welcome ${user.username}`}</li>
+        </Fade>
+
         { isAuthenticated ? userLinks : guestLinks }
+
+        <li className="hamburger-btn" onClick={ toggleMenu }>
+          <i class="fas fa-bars"></i>
+        </li>
       </ul>
     </nav>
   )
