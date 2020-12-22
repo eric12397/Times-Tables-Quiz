@@ -7,7 +7,7 @@
 
 .form-field {
   overflow: hidden;
-  width: 50%;
+  width: 60%;
   height: 50px;
   margin-bottom: 30px;
   position: relative;
@@ -73,4 +73,10 @@
   transform: translateY(-100%);
   font-size: 14px;
   color: #3bba9c
+}
+
+@media (max-width: 576px) {
+  .form-field {
+    width: 80%;
+  }
 }

@@ -7,7 +7,7 @@ import { Route, Switch } from 'react-router-dom';
 
 const MenuContainer = () => {
   return (
-    <div className="menu-container">
+    <div className="menu-flex">
       <div className="menu-content">
         <Switch>
           <Route exact path="/leaderboard" component={ Leaderboard }/>

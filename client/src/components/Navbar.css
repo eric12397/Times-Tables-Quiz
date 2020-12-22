@@ -1,12 +1,11 @@
 .navbar {
   color: #4da9f2;
   background: #202833;
-  border-radius: 15px;
-  width: 90%;
-  padding: 10px 30px;
+  padding: 8px 30px;
   margin: 0 auto;
-  margin-bottom: 7px;
+  margin-bottom: 15px;
   box-shadow: 2px 2px 5px black;
+  box-sizing: border-box;
 }
 
 .navbar ul {
@@ -42,12 +41,8 @@
   transition: all ease 0.4s
 }
 
-.navbar ul li.hamburger-btn{
-  display: none;
-}
-
 .navbar ul li.hamburger-btn {
-  font-size: 25px;
+  display: none;
 }
 
 @media all and (max-width: 900px) {
@@ -75,6 +70,13 @@
 
   .navbar ul li.hamburger-btn {
     display: block;
+    font-size: 25px;
   }
 }
 
+@media (max-width: 576px) {
+  .navbar ul li.title {
+    margin-right: 10px;
+    font-size: 20px;
+  }
+}

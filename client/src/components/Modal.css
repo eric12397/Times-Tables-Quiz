@@ -44,3 +44,9 @@
 	position: absolute;
 	cursor: pointer
 }
+
+@media (max-width: 576px) {
+  .modal-content {
+   	width: 70%;
+  }
+}

@@ -16,7 +16,6 @@ const Navbar = ({ isAuthenticated, user }) => {
 
   useEffect(() => {
     if (isAuthenticated) setWelcome(`Welcome ${user.username}`);
-    else setWelcome(null);
   }, [isAuthenticated, user]);
 
   const guestLinks = (
@@ -39,7 +38,7 @@ const Navbar = ({ isAuthenticated, user }) => {
         <li className="title">Times Table Trials</li>
         
         <Fade in={ isAuthenticated } className="welcome">
-          <li className="list-item">{`Welcome ${user.username}`}</li>
+          <li className="list-item">{welcome}</li>
         </Fade>
 
         { isAuthenticated ? userLinks : guestLinks }
