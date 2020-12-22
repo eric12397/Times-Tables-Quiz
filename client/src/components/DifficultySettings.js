@@ -7,7 +7,7 @@ const DifficultySettings = props => {
     } else if (event.target.value === 'intermediate') {
       props.setTimeLimit(5000)
     } else if (event.target.value === 'advanced') {
-      props.setTimeLimit(2000)
+      props.setTimeLimit(3000)
     }
   }
   
