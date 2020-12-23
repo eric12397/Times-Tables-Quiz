@@ -10,13 +10,16 @@ const Game = props => {
   const [firstFactor, setFirstFactor] = useState(null);
   const [secondFactor, setSecondFactor] = useState(null);
   const [choices, setChoices] = useState([]);
+
   const [currentScore, setCurrentScore] = useState(0);
   const [currentQuestions, setCurrentQuestions] = useState(0);
   const [highScore, setHighScore] = useState(
-    localStorage.getItem('highScore') ? localStorage.getItem('highScore') : 0
+    localStorage.getItem('highScore') ? 
+    localStorage.getItem('highScore') : 0
   );
   const [highQuestions, setHighQuestions] = useState(
-    localStorage.getItem('highQuestions') ? localStorage.getItem('highQuestions') : 0
+    localStorage.getItem('highQuestions') ? 
+    localStorage.getItem('highQuestions') : 0
   );
   const [increment, setIncrement] = useState(null);
   
@@ -196,6 +199,7 @@ const Game = props => {
           currentScore={ currentScore }
           highScore={ highScore } 
           questionsAnswered={ currentQuestions }
+          highQuestions={ highQuestions }
           timePerQuestion={ timePerQuestion }
           setIsGameActive={ props.setIsGameActive }
         />

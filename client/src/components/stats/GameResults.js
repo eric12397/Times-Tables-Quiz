@@ -16,13 +16,15 @@ const GameResults = ({ updateStats, ...props }) => {
   const avg = toSeconds(totalTime / props.timePerQuestion.length);
 
   useEffect(() => {
-    const { currentScore, highScore, questionsAnswered } = props;
-    console.log(props.timePerQuestion)
+    const { currentScore, highScore, questionsAnswered, highQuestions } = props;
+
+    console.log(props.timePerQuestion);
+    
     const stats = {
       currentScore,
-      highScore, 
+      highScore: parseInt(highScore), 
       questionsAnswered,
-      highQuestions: localStorage.getItem('highQuestions'),
+      highQuestions: parseInt(highQuestions),
       totalTime
     };
 
