@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PersonalRecord = ({ stats }) => {
+const PersonalRecord = ({ stats, authUser }) => {
   return (
     <table className="table responsive leaderboard">
       <thead>
@@ -13,7 +13,7 @@ const PersonalRecord = ({ stats }) => {
       </thead>
       <tbody>
       { stats.map((player, index) => (
-        <tr>
+        <tr className={`${player.username === authUser.username ? "user" : ""}`}>
           <td data-label="Rank">{ index+1 }</td>
           <td data-label="Player">{ player.username }</td>
           <td data-label="High Score">{ player.personalRecordStats.highScore }</td>

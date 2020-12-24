@@ -5,6 +5,10 @@
   color: #d4d4d4;
 }
 
+.form p {
+  margin: 0px;
+}
+
 .form-field {
   overflow: hidden;
   width: 60%;

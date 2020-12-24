@@ -29,6 +29,10 @@
   text-align: center
 }
 
+.user td {
+  color: #4da9f2;
+}S
+
 .correct {
   color: #8dc885;
 }

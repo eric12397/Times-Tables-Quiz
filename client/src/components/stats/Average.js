@@ -1,7 +1,7 @@
 import React from 'react';
 import { toSeconds } from '../../time';
 
-const Average = ({ stats }) => {
+const Average = ({ stats, authUser }) => {
   return (
     <table className="table responsive leaderboard">
       <thead>
@@ -15,18 +15,22 @@ const Average = ({ stats }) => {
       </thead>
       <tbody>
       { stats.map((player, index) => {
+        const scorePerGame = player.totalStats.score / player.totalStats.gamesPlayed || 0;
+        const questionsPerGame = player.totalStats.questions / player.totalStats.gamesPlayed || 0;
+        const timePerQuestion = player.totalStats.timePlayed/player.totalStats.questions || 0;
+
         return (
-        <tr>
+        <tr className={`${player.username === authUser.username ? "user" : ""}`}>
           <td data-label="Rank">{ index+1 }</td>
           <td data-label="Player">{ player.username }</td>
           <td data-label="Score/Game">
-            { (player.totalStats.score/player.totalStats.gamesPlayed).toFixed(2) }
+            { (scorePerGame).toFixed(2) }
           </td>
           <td data-label="Questions/Game">
-            { (player.totalStats.questions/player.totalStats.gamesPlayed).toFixed(2) }
+            { (questionsPerGame).toFixed(2) }
           </td>
           <td data-label="Time/Question">
-            { toSeconds(player.totalStats.timePlayed/player.totalStats.questions) + " sec" }
+            { toSeconds(timePerQuestion) + " sec" }
           </td>
         </tr> )
       })}
