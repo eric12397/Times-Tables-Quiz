@@ -35,7 +35,7 @@ const Navbar = ({ isAuthenticated, user }) => {
   return (
     <nav className="navbar">
       <ul className={`${isOpen ? 'show' : 'hide'}`}>
-        <li className="title">Times Table Trials</li>
+        <li className="title" onClick={ () => history.push('/') }>Times Table Trials</li>
         
         <Fade in={ isAuthenticated } className="welcome">
           <li className="list-item">{welcome}</li>
