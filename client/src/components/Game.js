@@ -36,6 +36,7 @@ const Game = props => {
   const [timeElapsed, setTimeElapsed] = useState(0);
 
   useInterval(
+    // keeps track of how much time elapsed for each question answered
     () => {
       let prev = prevTime ? prevTime : Date.now();
       let diffTime = Date.now() - prev;
@@ -114,6 +115,7 @@ const Game = props => {
   useEffect(runTimer, [isTimerActive]);
 
   useEffect(() => {
+    // handles timer for each question
     if (isAnswered && timer <= 95) {
       setTimer(prevTime => prevTime + 5);
 
@@ -127,6 +129,7 @@ const Game = props => {
   }, [isAnswered, timer])
 
   useEffect(() => {
+    // scoring system dependent on how quickly each question is answered
     if (isAnswered && isCorrect && timeElapsed <= 1000) {
       setIncrement('+100');
       setCurrentScore(score => score + 100);
