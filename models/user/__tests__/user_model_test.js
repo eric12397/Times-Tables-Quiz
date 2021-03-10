@@ -3,39 +3,135 @@ const User = require('../user_model');
 const db = require('../../../test_utils/test_db');
 const bcrypt = require('bcrypt');
 
-const mockUserData = {
-  username: 'Eel',
-  password: 'IAmEel'
+// seed data
+const mockUser1 = {
+  username: 'Mike',
+  password: 'IAmMike'
 }
+
+let mockUser1Id;
+
+const mockUser2 = {
+  username: 'Brad',
+  password: 'IAmBrad'
+}
+
+let mockUser2Id;
+
+const createUsers = async () => {
+  const createdUser1 = await User.create(mockUser1)
+  mockUser1Id = createdUser1._id;
+
+  const createdUser2 = await User.create(mockUser2)
+  mockUser2Id = createdUser2._id;
+};
+
 
 describe('Testing User Model', () => {
 
   beforeAll(async () => await db.connect());
+
+  beforeEach(async () => await createUsers());
 
   afterEach(async () => await db.clearData());
 
   afterAll(async () => await db.disconnect())
 
 
-  it('should create and save a new user', async () => {
+  it('should fetch a specific user', async () => {
+    const foundUser = await User.findById(mockUser1Id);
 
-    const mockUser = new User({
-      username: mockUserData.username,
-      password: mockUserData.password,
-    });
-    const savedUser = await mockUser.save();
+    expect(foundUser._id).toStrictEqual(mockUser1Id);
+    expect(foundUser.username).toBe(mockUser1.username);
+  })
+
+
+  it('should fetch all users', async () => {
+    const allUsers = await User.find();
+
+    expect(allUsers).toHaveLength(2);
+
+    expect(allUsers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(mockUser1),
+        expect.objectContaining(mockUser2)
+      ])
+    );
+
+  })
+
+
+  it('should create and save a new user', async () => {
+    const newUser = { username: 'Gabby', password: 'IAmGabby' };
+    const savedUser = await User.create(newUser);
 
     expect(savedUser._id).toBeDefined();
-    expect(savedUser.username).toBe(mockUserData.username);
-    expect(savedUser.password).toBe(mockUserData.password);
-    
+    expect(savedUser.username).toBe(newUser.username);
+  
+    // default values should be 0
     expect(savedUser.totalStats.score).toBe(0);
     expect(savedUser.totalStats.questions).toBe(0);
     expect(savedUser.totalStats.gamesPlayed).toBe(0);
     expect(savedUser.totalStats.timePlayed).toBe(0);
     expect(savedUser.personalRecordStats.highScore).toBe(0);
     expect(savedUser.personalRecordStats.questions).toBe(0);
+
+    // confirm that new user collection was added to existing seed data
+    const allUsers = await User.find();
+    expect(allUsers).toHaveLength(3)
   });
+
+
+  it('should update a specific user', async () => {
+    const foundUser = await User.findById(mockUser1Id);
+
+    const newUsername = "Zeke";
+    foundUser.username = newUsername;
+
+    // new total stats
+    const score = 2000;
+    const questions = 15;
+    const gamesPlayed = 3;
+    const timePlayed = 12000;
+
+    foundUser.totalStats.score = score;
+    foundUser.totalStats.questions = questions;
+    foundUser.totalStats.gamesPlayed = gamesPlayed;
+    foundUser.totalStats.timePlayed = timePlayed;
+
+    // new personal record stats
+    const highScore = 5000;
+    const highQuestions = 10;
+
+    foundUser.personalRecordStats.highScore = highScore
+    foundUser.personalRecordStats.questions = highQuestions
+
+    const updatedUser = await foundUser.save();
+
+    expect(updatedUser.username).toBe(newUsername);
+    expect(updatedUser.totalStats.score).toBe(score);
+    expect(updatedUser.totalStats.questions).toBe(questions);
+    expect(updatedUser.totalStats.gamesPlayed).toBe(gamesPlayed);
+    expect(updatedUser.totalStats.timePlayed).toBe(timePlayed);
+    expect(updatedUser.personalRecordStats.highScore).toBe(highScore);
+    expect(updatedUser.personalRecordStats.questions).toBe(highQuestions);
+  })
+
+
+  it('should delete a specific user', async () => {
+    await User.findByIdAndDelete(mockUser1Id);
+
+    const allUsers = await User.find();
+
+    expect(allUsers).toHaveLength(1);
+
+    expect(allUsers).toEqual(
+      expect.arrayContaining([
+        expect.not.objectContaining(mockUser1),
+        expect.objectContaining(mockUser2)
+      ])
+    );
+  })
 
 });
 
