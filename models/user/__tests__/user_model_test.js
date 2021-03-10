@@ -46,6 +46,15 @@ describe('Testing User Model', () => {
   })
 
 
+  it('should fail to fetch an invalid user and return null', async () => {
+    const invalidUserId = mongoose.Types.ObjectId();
+
+    await expect(User.findById(invalidUserId))
+          .resolves
+          .toBeNull()
+  })
+
+
   it('should fetch all users', async () => {
     const allUsers = await User.find();
 
@@ -80,6 +89,27 @@ describe('Testing User Model', () => {
     const allUsers = await User.find();
     expect(allUsers).toHaveLength(3)
   });
+
+
+  it('should fail to create a new user without a required field', async () => {
+    const userMissingPassword = { username: "Aisha" };
+    const userMissingName = { password: "IAmAisha" };
+
+    await expect(User.create(userMissingPassword))
+          .rejects
+          .toThrow(mongoose.Error.ValidationError)
+
+    await expect(User.create(userMissingName))
+          .rejects
+          .toThrow(mongoose.Error.ValidationError)
+  })
+
+
+  it('should fail to create a user with the same credentials', async () => {
+    await expect(User.create(mockUser1))
+          .rejects
+          .toThrow(mongoose.Error.MongoError) // unique constraints are Mongo errors
+  })
 
 
   it('should update a specific user', async () => {
