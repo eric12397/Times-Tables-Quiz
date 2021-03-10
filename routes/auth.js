@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const config = require('../config');
 const authMiddleware = require('../middleware/auth');
-const User = require('../models/User');
+const User = require('../models/user/user_model');
 
 const { JWT_SECRET } = config;
 
