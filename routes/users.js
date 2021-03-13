@@ -16,8 +16,7 @@ router.post('/:id/stats', authMiddleware, async (req, res) => {
   const gameResults = req.body;
 
   try {
-    const user = await UserService.fetchUser(id);
-    await UserService.updateUserStats(user, gameResults)
+    await UserService.updateUserStats(id, gameResults)
     res.status(200).json({ msg: "User's stats updated" })
   } catch (error) {
     res.status(400).json({ error: error.message })
