@@ -113,35 +113,39 @@ describe('Testing User Model', () => {
 
 
   it('should update a specific user', async () => {
-    const foundUser = await User.findById(mockUser1Id);
-
     const newUsername = "Zeke";
-    foundUser.username = newUsername;
-
+    
     // new total stats
     const score = 2000;
     const questions = 15;
-    const gamesPlayed = 3;
     const timePlayed = 12000;
-
-    foundUser.totalStats.score = score;
-    foundUser.totalStats.questions = questions;
-    foundUser.totalStats.gamesPlayed = gamesPlayed;
-    foundUser.totalStats.timePlayed = timePlayed;
 
     // new personal record stats
     const highScore = 5000;
     const highQuestions = 10;
 
-    foundUser.personalRecordStats.highScore = highScore
-    foundUser.personalRecordStats.questions = highQuestions
+    const filter = { username: mockUser1.username };
+    const update = {
+      $inc: { 
+        "totalStats.score": score,
+        "totalStats.questions": questions,
+        "totalStats.gamesPlayed": 1,
+        "totalStats.timePlayed": timePlayed,
+      },
+      $set: {
+        "username": newUsername,
+        "personalRecordStats.highScore": highScore,
+        "personalRecordStats.questions": highQuestions
+      }
+    };
+    const opts = { new: true };
 
-    const updatedUser = await foundUser.save();
+    const updatedUser = await User.findOneAndUpdate(filter, update, opts);
 
     expect(updatedUser.username).toBe(newUsername);
     expect(updatedUser.totalStats.score).toBe(score);
     expect(updatedUser.totalStats.questions).toBe(questions);
-    expect(updatedUser.totalStats.gamesPlayed).toBe(gamesPlayed);
+    expect(updatedUser.totalStats.gamesPlayed).toBe(1);
     expect(updatedUser.totalStats.timePlayed).toBe(timePlayed);
     expect(updatedUser.personalRecordStats.highScore).toBe(highScore);
     expect(updatedUser.personalRecordStats.questions).toBe(highQuestions);
