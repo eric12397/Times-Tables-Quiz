@@ -1,21 +1,15 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 
-
 const fetchAllUsers = User => () => {
   return User.find().select('-password');
 }
-
 
 const fetchUser = User => id => {
   return User.findById(id).select('-password')
 }
 
-
 const createUser = User => async (username, password) => {
-  const user = await User.findOne({ username });
-  if (user) throw Error('Username already exists');
-
   const salt = await bcrypt.genSalt(10);
   if (!salt) throw Error('Salt generation error');
 
@@ -27,12 +21,8 @@ const createUser = User => async (username, password) => {
     password: hash
   });
 
-  const savedUser = await newUser.save();
-  if (!savedUser) throw Error('User save error');
-
-  return savedUser
+  return newUser.save();
 }
-
 
 const loginUser = User => async (username, password) => {
   if (!username || !password) 
@@ -48,7 +38,6 @@ const loginUser = User => async (username, password) => {
   return user
 }
 
-
 const updateUserStats = User => async (id, gameResults) => {
   const user = await User.findById(id);
 
@@ -63,10 +52,10 @@ const updateUserStats = User => async (id, gameResults) => {
   const filter = { _id: id };
   const update = {
     $inc: { 
-        "totalStats.score": gameResults.currentScore,
-        "totalStats.questions": gameResults.questionsAnswered,
-        "totalStats.gamesPlayed": 1,
-        "totalStats.timePlayed": gameResults.totalTime,
+      "totalStats.score": gameResults.currentScore,
+      "totalStats.questions": gameResults.questionsAnswered,
+      "totalStats.gamesPlayed": 1,
+      "totalStats.timePlayed": gameResults.totalTime,
     },
     $set: {
       "personalRecordStats.highScore": highScore,
@@ -76,7 +65,6 @@ const updateUserStats = User => async (id, gameResults) => {
 
   return User.updateOne(filter, update);
 }
-
 
 module.exports = User => {
   return {
