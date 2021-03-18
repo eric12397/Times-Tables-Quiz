@@ -12,9 +12,7 @@ const getToken = async () => {
     .post('/api/auth/login')
     .send({ username: 'Gordi', password: 'IAmGordi' })
   
-  console.log(response.body)  
   let token = response.body.token;
-
   return token;
 }
 
@@ -117,20 +115,17 @@ describe('Testing routes', () => {
 
 
   it ("should get a protected user with auth", async () => {
-    const token = getToken();
-    const user = User.findOne({ username: 'Gordi' });
+    const token = await getToken();
 
     const response = await request(server)
-      .get('/api/auth/login')
-      .set('Accept', 'application/json')
+      .get('/api/auth/user')
       .set('Authorization', token)
       .expect(200);
 
-    console.log(response)
-    const { id, username } = response.body
+    const { id, username } = response.body.user
 
-    expect(user._id).toEqual(id);
-    expect(user.username).toEqual(username);
+    expect(id).toBeDefined();
+    expect(username).toEqual('Gordi');
   })
 
 
@@ -139,6 +134,5 @@ describe('Testing routes', () => {
       .get('/api/auth/user')
       .expect(401)
   })
+
 })
-
-
