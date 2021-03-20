@@ -164,14 +164,14 @@ describe("Testing UserService", () => {
     
     const MockModel = {
       findById: sinon.stub().withArgs(12).returns(mockUser),
-      updateOne: sinon.spy()
+      findOneAndUpdate: sinon.spy()
     };
 
     const userService = UserService(MockModel);
     await userService.updateUserStats(12, mockResults);
 
     sinon.assert.calledWith(MockModel.findById, 12);
-    expect(MockModel.updateOne.calledOnce).toEqual(true);
+    expect(MockModel.findOneAndUpdate.calledOnce).toEqual(true);
   })
 
 });

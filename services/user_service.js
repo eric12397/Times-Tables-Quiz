@@ -61,9 +61,10 @@ const updateUserStats = User => async (id, gameResults) => {
       "personalRecordStats.highScore": highScore,
       "personalRecordStats.questions": highQuestions
     }
-  }
+  };
+  options = { new: true } 
 
-  return User.updateOne(filter, update);
+  return User.findOneAndUpdate(filter, update, options);
 }
 
 module.exports = User => {

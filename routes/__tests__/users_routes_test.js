@@ -27,7 +27,22 @@ const createSeedData = async () => {
   }
 
   const createdUser = await User.create(seedData);
+
+  createdUser.totalStats.score = 2000;
+  createdUser.totalStats.questions = 15;
+  createdUser.totalStats.gamesPlayed = 3;
+  createdUser.totalStats.timePlayed = 10000;
+
+  createdUser.personalRecordStats.highScore = 5000;
+  createdUser.personalRecordStats.questions = 10;
+
+  await createdUser.save();
 };
+
+const getId = async () => {
+  const user = await User.findOne({ username: "Gordi" });
+  return user._id
+}
 
 
 describe('Testing routes', () => {
@@ -133,6 +148,93 @@ describe('Testing routes', () => {
     await request(server)
       .get('/api/auth/user')
       .expect(401)
+  })
+
+
+  it ("should correctly increment totalTime, currentScore, and questionsAnswered, gamesPlayed fields", async () => {
+    const token = await getToken();
+    const id = await getId();
+    
+    const response = await request(server)
+      .post(`/api/users/${id}/stats`)
+      .set('Authorization', token)
+      .send({ 
+        highScore: 6000,
+        highQuestions: 20,
+        totalTime: 10000,
+        currentScore: 6000,
+        questionsAnswered: 12
+       })
+      .expect(200)
+
+    const { user } = response.body;
+
+    expect(user.totalStats.score).toBe(8000);
+    expect(user.totalStats.questions).toBe(27);
+    expect(user.totalStats.timePlayed).toBe(20000);
+    expect(user.totalStats.gamesPlayed).toBe(4);
+  })
+
+
+  it ("should overwrite previous high scores/questions when new high scores/questions are greater", async () => {
+    const token = await getToken();
+    const id = await getId();
+    
+    const response = await request(server)
+      .post(`/api/users/${id}/stats`)
+      .set('Authorization', token)
+      .send({ 
+        highScore: 6000,
+        highQuestions: 20,
+        totalTime: 10000,
+        currentScore: 6000,
+        questionsAnswered: 12
+       })
+      .expect(200)
+
+    const { user } = response.body;
+
+    expect(user.personalRecordStats.highScore).toBe(6000);
+    expect(user.personalRecordStats.questions).toBe(20);
+  })
+
+
+  it ("should not overwrite previous high scores/questions are when new high scores/questions are lesser", async () => {
+    const token = await getToken();
+    const id = await getId();
+    
+    const response = await request(server)
+      .post(`/api/users/${id}/stats`)
+      .set('Authorization', token)
+      .send({ 
+        highScore: 100,
+        highQuestions: 1,
+        totalTime: 10000,
+        currentScore: 6000,
+        questionsAnswered: 12
+       })
+      .expect(200)
+      
+    const { user } = response.body;
+
+    expect(user.personalRecordStats.highScore).toBe(5000);
+    expect(user.personalRecordStats.questions).toBe(10);
+  })
+
+
+  it ("should fail to update a user's stats without auth", async () => {
+    const id = await getId();
+
+    await request(server)
+      .post(`/api/users/${id}/stats`)
+      .expect(401)
+  })
+
+
+  it ("returns 404", async () => {
+    await request(server)
+      .get("/fail")
+      .expect(404)
   })
 
 })
