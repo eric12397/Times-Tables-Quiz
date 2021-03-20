@@ -16,6 +16,14 @@ const getToken = async () => {
   return token;
 }
 
+let seedScore = 5000;
+let seedQuestions = 15;
+let seedGamesPlayed = 3;
+let seedTimePlayed = 10000;
+
+let seedHighScore = 3000;
+let seedHighQuestions = 10;
+
 const createSeedData = async () => {
   const password = "IAmGordi";
   const salt = await bcrypt.genSalt(10);
@@ -28,13 +36,13 @@ const createSeedData = async () => {
 
   const createdUser = await User.create(seedData);
 
-  createdUser.totalStats.score = 2000;
-  createdUser.totalStats.questions = 15;
-  createdUser.totalStats.gamesPlayed = 3;
-  createdUser.totalStats.timePlayed = 10000;
+  createdUser.totalStats.score = seedScore;
+  createdUser.totalStats.questions = seedQuestions;
+  createdUser.totalStats.gamesPlayed = seedGamesPlayed;
+  createdUser.totalStats.timePlayed = seedTimePlayed;
 
-  createdUser.personalRecordStats.highScore = 5000;
-  createdUser.personalRecordStats.questions = 10;
+  createdUser.personalRecordStats.highScore = seedHighScore;
+  createdUser.personalRecordStats.questions = seedHighQuestions;
 
   await createdUser.save();
 };
@@ -151,7 +159,7 @@ describe('Testing routes', () => {
   })
 
 
-  it ("should correctly increment totalTime, currentScore, and questionsAnswered, gamesPlayed fields", async () => {
+  it ("should correctly increment totalStats fields", async () => {
     const token = await getToken();
     const id = await getId();
     
@@ -169,10 +177,10 @@ describe('Testing routes', () => {
 
     const { user } = response.body;
 
-    expect(user.totalStats.score).toBe(8000);
-    expect(user.totalStats.questions).toBe(27);
-    expect(user.totalStats.timePlayed).toBe(20000);
-    expect(user.totalStats.gamesPlayed).toBe(4);
+    expect(user.totalStats.score).toBe(seedScore + 6000);
+    expect(user.totalStats.questions).toBe(seedQuestions + 12);
+    expect(user.totalStats.timePlayed).toBe(seedTimePlayed + 10000);
+    expect(user.totalStats.gamesPlayed).toBe(seedGamesPlayed + 1);
   })
 
 
@@ -193,13 +201,15 @@ describe('Testing routes', () => {
       .expect(200)
 
     const { user } = response.body;
-
+    
+    expect(user.personalRecordStats.highScore).not.toBe(seedHighScore);
     expect(user.personalRecordStats.highScore).toBe(6000);
+    expect(user.personalRecordStats.questions).not.toBe(seedHighQuestions);
     expect(user.personalRecordStats.questions).toBe(20);
   })
 
 
-  it ("should not overwrite previous high scores/questions are when new high scores/questions are lesser", async () => {
+  it ("should not overwrite previous high scores/questions when new high scores/questions are lesser", async () => {
     const token = await getToken();
     const id = await getId();
     
@@ -217,8 +227,10 @@ describe('Testing routes', () => {
       
     const { user } = response.body;
 
-    expect(user.personalRecordStats.highScore).toBe(5000);
-    expect(user.personalRecordStats.questions).toBe(10);
+    expect(user.personalRecordStats.highScore).not.toBe(100);
+    expect(user.personalRecordStats.highScore).toBe(seedHighScore);
+    expect(user.personalRecordStats.questions).not.toBe(1);
+    expect(user.personalRecordStats.questions).toBe(seedHighQuestions);
   })
 
 
