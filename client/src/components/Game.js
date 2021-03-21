@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import QuestionContainer from './QuestionContainer';
 import Timer from './Timer';
 import ChoiceList from './ChoiceList';
@@ -13,14 +14,8 @@ const Game = props => {
 
   const [currentScore, setCurrentScore] = useState(0);
   const [currentQuestions, setCurrentQuestions] = useState(0);
-  const [highScore, setHighScore] = useState(
-    localStorage.getItem('highScore') ? 
-    localStorage.getItem('highScore') : 0
-  );
-  const [highQuestions, setHighQuestions] = useState(
-    localStorage.getItem('highQuestions') ? 
-    localStorage.getItem('highQuestions') : 0
-  );
+  const [highScore, setHighScore] = useState(props.highScore);
+  const [highQuestions, setHighQuestions] = useState(props.highQuestions);
   const [increment, setIncrement] = useState(null);
   
   const [isCorrect, setIsCorrect] = useState(false);
@@ -189,10 +184,6 @@ const Game = props => {
       setHighQuestions(newHighQuestions);
     }
 
-    return () => {
-      localStorage.setItem('highScore', newHighScore || highScore);
-      localStorage.setItem('highQuestions', newHighQuestions || highQuestions);
-    }
   }, [currentScore, highScore, currentQuestions, highQuestions])
 
   return (
@@ -200,9 +191,8 @@ const Game = props => {
       { showResults ?
         <GameResults 
           currentScore={ currentScore }
-          highScore={ highScore } 
+          highScore={ highScore }
           questionsAnswered={ currentQuestions }
-          highQuestions={ highQuestions }
           timePerQuestion={ timePerQuestion }
           setIsGameActive={ props.setIsGameActive }
         />
@@ -253,4 +243,10 @@ const Game = props => {
   )
 }
 
-export default Game
+const mapStateToProps = state => {
+  return {
+    highScore: state.auth.user.personalRecordStats.highScore,
+    highQuestions: state.auth.user.personalRecordStats.questions
+  }
+}
+export default connect(mapStateToProps, null)(Game)

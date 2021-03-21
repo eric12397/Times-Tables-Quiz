@@ -42,12 +42,12 @@ const updateUserStats = User => async (id, gameResults) => {
   const user = await User.findById(id);
 
   let highScore = 
-    user.personalRecordStats.highScore > gameResults.highScore ?
-    user.personalRecordStats.highScore : gameResults.highScore;
+    gameResults.currentScore > user.personalRecordStats.highScore ?
+    gameResults.currentScore : user.personalRecordStats.highScore
 
   let highQuestions =
-    user.personalRecordStats.questions > gameResults.highQuestions ?
-    user.personalRecordStats.questions : gameResults.highQuestions;
+    gameResults.questionsAnswered > user.personalRecordStats.questions ?
+    gameResults.questionsAnswered : user.personalRecordStats.questions
 
   const filter = { _id: id };
   const update = {

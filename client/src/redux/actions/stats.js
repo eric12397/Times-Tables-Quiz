@@ -30,11 +30,11 @@ export const fetchStats = () => (dispatch, getState) => {
 export const updateStats = stats => (dispatch, getState) => {
   dispatch({ type: UPDATE_STATS_PENDING });
 
-  const { id } = getState().auth.user;
+  const { _id } = getState().auth.user;
   const body = JSON.stringify(stats);
 
   axios
-    .post(`api/users/${id}/stats`, body, jwtConfig(getState))
+    .post(`api/users/${_id}/stats`, body, jwtConfig(getState))
     .then(response => 
       dispatch({ 
         type: UPDATE_STATS_SUCCESS,

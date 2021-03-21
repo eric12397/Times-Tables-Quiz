@@ -97,7 +97,7 @@ describe('Testing routes', () => {
     const token = response.body.token;
       
     expect(token).toBeDefined();
-    expect(createdUser.id).toBeDefined();
+    expect(createdUser._id).toBeDefined();
     expect(createdUser.username).toBe("Shaq");
   })
 
@@ -145,9 +145,9 @@ describe('Testing routes', () => {
       .set('Authorization', token)
       .expect(200);
 
-    const { id, username } = response.body.user
+    const { _id, username } = response.body.user
 
-    expect(id).toBeDefined();
+    expect(_id).toBeDefined();
     expect(username).toEqual('Gordi');
   })
 
@@ -167,8 +167,6 @@ describe('Testing routes', () => {
       .post(`/api/users/${id}/stats`)
       .set('Authorization', token)
       .send({ 
-        highScore: 6000,
-        highQuestions: 20,
         totalTime: 10000,
         currentScore: 6000,
         questionsAnswered: 12
@@ -184,7 +182,7 @@ describe('Testing routes', () => {
   })
 
 
-  it ("should overwrite previous high scores/questions when new high scores/questions are greater", async () => {
+  it ("should overwrite previous high scores/questions when new scores/questions are greater", async () => {
     const token = await getToken();
     const id = await getId();
     
@@ -192,11 +190,9 @@ describe('Testing routes', () => {
       .post(`/api/users/${id}/stats`)
       .set('Authorization', token)
       .send({ 
-        highScore: 6000,
-        highQuestions: 20,
         totalTime: 10000,
         currentScore: 6000,
-        questionsAnswered: 12
+        questionsAnswered: 20
        })
       .expect(200)
 
@@ -209,7 +205,7 @@ describe('Testing routes', () => {
   })
 
 
-  it ("should not overwrite previous high scores/questions when new high scores/questions are lesser", async () => {
+  it ("should not overwrite previous high scores/questions when new scores/questions are lesser", async () => {
     const token = await getToken();
     const id = await getId();
     
@@ -217,11 +213,9 @@ describe('Testing routes', () => {
       .post(`/api/users/${id}/stats`)
       .set('Authorization', token)
       .send({ 
-        highScore: 100,
-        highQuestions: 1,
         totalTime: 10000,
-        currentScore: 6000,
-        questionsAnswered: 12
+        currentScore: 100,
+        questionsAnswered: 1
        })
       .expect(200)
       

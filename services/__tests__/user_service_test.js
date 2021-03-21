@@ -157,9 +157,7 @@ describe("Testing UserService", () => {
     const mockResults = {
       currentScore: 300,
       questionsAnswered: 5,
-      totalTime: 5000,
-      highScore: 5000,
-      highQuestions: 25
+      totalTime: 5000
     };
     
     const MockModel = {

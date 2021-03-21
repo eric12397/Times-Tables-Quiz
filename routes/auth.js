@@ -16,10 +16,7 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({
       token, 
-      user: {
-        id: savedUser._id,
-        username: savedUser.username,
-      }
+      user: savedUser
     })
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -37,10 +34,7 @@ router.post('/login', async (req, res) => {
 
     res.status(200).json({
       token,
-      user: {
-        id: user._id,
-        username: user.username
-      }
+      user
     });
   } catch (error) {
     res.status(400).json({ error: error.message })
@@ -50,12 +44,7 @@ router.post('/login', async (req, res) => {
 router.get('/user', authMiddleware, async (req, res) => {
   try {
     const user = await UserService.fetchUser(req.user.id);
-    res.status(200).json({
-      user: {
-        id: user._id,
-        username: user.username
-      }
-    });
+    res.status(200).json({ user });
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
